@@ -1,0 +1,149 @@
+nohup: ignoring input
+
+> watch
+> babel react --out-dir react-dist --extensions .js,.jsx,.ts,.tsx --watch
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+SyntaxError: /var/www/html/ventasPet/react/admission/admission-billing/utils/helpers.js: Unexpected token, expected "," (1:39)
+
+> 1 | export const calculateTotal = (products: any[]): number => {
+    |                                        ^
+  2 |   return products.reduce((sum, product) => sum + (product.price * product.quantity), 0);
+  3 | };
+  4 | export const calculatePaid = (payments) => {
+    at constructor (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:367:19)
+    at JSXParserMixin.raise (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:6630:19)
+    at JSXParserMixin.unexpected (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:6650:16)
+    at JSXParserMixin.expect (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:6930:12)
+    at JSXParserMixin.parseParenAndDistinguishExpression (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:11669:14)
+    at JSXParserMixin.parseExprAtom (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:11335:23)
+    at JSXParserMixin.parseExprAtom (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:4797:20)
+    at JSXParserMixin.parseExprSubscripts (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:11085:23)
+    at JSXParserMixin.parseUpdate (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:11070:21)
+    at JSXParserMixin.parseMaybeUnary (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:11050:23) {
+  code: 'BABEL_PARSE_ERROR',
+  reasonCode: 'UnexpectedToken',
+  loc: Position { line: 1, column: 39, index: 39 },
+  pos: 39,
+  syntaxPlugin: undefined
+}
+SyntaxError: /var/www/html/ventasPet/react/disabilities/enums/columns.ts: Type parameter list cannot be empty. (14:6)
+
+  12 |     header: "",
+  13 |     body: (rowData: DisabilityData) => (
+> 14 |       <>
+     |       ^
+  15 |         <button
+  16 |           className="btn btn-link"
+  17 |           onClick={() => { } }
+    at constructor (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:367:19)
+    at TypeScriptParserMixin.raise (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:6630:19)
+    at TypeScriptParserMixin.tsParseTypeParameters (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:8109:12)
+    at /var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:9812:29
+    at TypeScriptParserMixin.tryParse (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:6938:20)
+    at TypeScriptParserMixin.parseMaybeAssign (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:9810:24)
+    at /var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:10804:39
+    at TypeScriptParserMixin.allowInAnd (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:12436:12)
+    at TypeScriptParserMixin.parseMaybeAssignAllowIn (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:10804:17)
+    at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:12503:17) {
+  code: 'BABEL_PARSE_ERROR',
+  reasonCode: 'EmptyTypeParameters',
+  loc: Position { line: 14, column: 6, index: 507 },
+  pos: 507,
+  syntaxPlugin: 'typescript'
+}
+SyntaxError: /var/www/html/ventasPet/react/invoices/form/FormDebitCreditNotes.jsx: Missing semicolon. (16:4)
+
+  14 |
+  15 | // Definición de tipos
+> 16 | type TypeOption = {
+     |     ^
+  17 |     id: number;
+  18 |     name: string;
+  19 | };
+    at constructor (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:367:19)
+    at JSXParserMixin.raise (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:6630:19)
+    at JSXParserMixin.semicolon (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:6926:10)
+    at JSXParserMixin.parseExpressionStatement (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:13294:10)
+    at JSXParserMixin.parseStatementContent (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:12908:19)
+    at JSXParserMixin.parseStatementLike (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:12776:17)
+    at JSXParserMixin.parseModuleItem (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:12753:17)
+    at JSXParserMixin.parseBlockOrModuleBlockBody (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:13325:36)
+    at JSXParserMixin.parseBlockBody (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:13318:10)
+    at JSXParserMixin.parseProgram (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:12634:10) {
+  code: 'BABEL_PARSE_ERROR',
+  reasonCode: 'MissingSemicolon',
+  loc: Position { line: 16, column: 4, index: 326 },
+  pos: 326,
+  syntaxPlugin: undefined
+}
+SyntaxError: /var/www/html/ventasPet/react/login/MainSessionClinic.tsx: Unexpected token, expected ":" (80:107)
+
+  78 |                                                         onClick={() => setShowPassword(!showPassword)}
+  79 |                                                     >
+> 80 |                                                         {showPassword ? <i className="fa-solid fa-eye"></i>}
+     |                                                                                                            ^
+  81 |                                                     </span>
+  82 |                                                 </div>
+  83 |
+    at constructor (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:367:19)
+    at TypeScriptParserMixin.raise (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:6630:19)
+    at TypeScriptParserMixin.unexpected (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:6650:16)
+    at TypeScriptParserMixin.expect (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:6930:12)
+    at TypeScriptParserMixin.parseConditional (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:10896:12)
+    at TypeScriptParserMixin.parseConditional (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:9631:18)
+    at TypeScriptParserMixin.parseMaybeConditional (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:10889:17)
+    at TypeScriptParserMixin.parseMaybeAssign (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:10835:21)
+    at TypeScriptParserMixin.parseMaybeAssign (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:9806:20)
+    at TypeScriptParserMixin.parseExpressionBase (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:10788:23) {
+  code: 'BABEL_PARSE_ERROR',
+  reasonCode: 'UnexpectedToken',
+  loc: Position { line: 80, column: 107, index: 4485 },
+  pos: 4485,
+  syntaxPlugin: undefined
+}
+SyntaxError: /var/www/html/ventasPet/react/manual-usuario/components/EmptyStateManualSection.tsx: Unexpected token, expected "jsxTagEnd" (38:12)
+
+  36 |                     onClick={() => setShowCategoryModal(true)}
+  37 |                 ><i className="fas fa-plus"></i></Button
+> 38 |             )}
+     |             ^
+  39 |
+  40 |             <style>
+  41 |                 {`
+    at constructor (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:367:19)
+    at TypeScriptParserMixin.raise (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:6630:19)
+    at TypeScriptParserMixin.unexpected (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:6650:16)
+    at TypeScriptParserMixin.expect (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:6930:12)
+    at TypeScriptParserMixin.jsxParseClosingElementAt (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:4713:10)
+    at TypeScriptParserMixin.jsxParseElementAt (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:4728:37)
+    at TypeScriptParserMixin.jsxParseElement (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:4782:17)
+    at TypeScriptParserMixin.parseExprAtom (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:4792:19)
+    at TypeScriptParserMixin.parseExprSubscripts (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:11085:23)
+    at TypeScriptParserMixin.parseUpdate (/var/www/html/ventasPet/node_modules/@babel/parser/lib/index.js:11070:21) {
+  code: 'BABEL_PARSE_ERROR',
+  reasonCode: 'UnexpectedToken',
+  loc: Position { line: 38, column: 12, index: 1616 },
+  pos: 1616,
+  syntaxPlugin: undefined
+}
+Successfully compiled 1395 files with Babel (15392ms).
+The watcher is ready.
+Successfully compiled 1 file with Babel (105ms).
+Successfully compiled 1 file with Babel (178ms).
+Successfully compiled 1 file with Babel (151ms).
+Successfully compiled 1 file with Babel (103ms).
+Successfully compiled 1 file with Babel (130ms).
+Successfully compiled 1 file with Babel (133ms).
+Successfully compiled 1 file with Babel (104ms).
+Successfully compiled 1 file with Babel (108ms).
+Successfully compiled 1 file with Babel (114ms).
+Successfully compiled 1 file with Babel (105ms).
+Successfully compiled 1 file with Babel (111ms).
+Successfully compiled 1 file with Babel (108ms).
+Successfully compiled 1 file with Babel (103ms).
+Successfully compiled 1 file with Babel (108ms).
+Successfully compiled 1 file with Babel (110ms).
+Successfully compiled 1 file with Babel (103ms).
+Successfully compiled 1 file with Babel (107ms).
+Successfully compiled 1 file with Babel (110ms).
