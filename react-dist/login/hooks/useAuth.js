@@ -23,11 +23,14 @@ export const useAuth = () => {
   useEffect(() => {
     loadProgress();
   }, []);
+  const BASE_PATH = "/front_peru"; // prefijo de tu SPA
+
   const redirectToDashboard = () => {
+    const origin = window.location.origin; // dominio + protocolo
     if (currentConfig?.config_tenants?.finished_configuration) {
-      window.location.href = "/front_peru/Dashboard";
+      window.location.href = `${origin}${BASE_PATH}/Dashboard`;
     } else {
-      window.location.href = "/front_peru/configuracionesGenerales";
+      window.location.href = `${origin}${BASE_PATH}/configuracionesGenerales`;
     }
   };
   const saveUserData = userInfo => {

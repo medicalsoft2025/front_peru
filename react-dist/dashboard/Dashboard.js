@@ -136,7 +136,7 @@ const Dashboard = () => {
     id: "AdmissionsSummaryCard"
   }, /*#__PURE__*/React.createElement(AdmissionsSummaryCard, null))), /*#__PURE__*/React.createElement("hr", {
     className: "bg-body-secondary mb-6 mt-4"
-  }), /*#__PURE__*/React.createElement("h1", null, "holaaaaa"), /*#__PURE__*/React.createElement("div", {
+  }), /*#__PURE__*/React.createElement("div", {
     className: "mb-4"
   }, /*#__PURE__*/React.createElement(Accordion, {
     activeIndex: null

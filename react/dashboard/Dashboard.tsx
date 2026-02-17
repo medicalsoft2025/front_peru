@@ -145,7 +145,6 @@ const Dashboard = () => {
 
             <hr className="bg-body-secondary mb-6 mt-4" />
 
-            <h1>holaaaaa</h1>
 
             <div className="mb-4">
                 <Accordion activeIndex={null}>
