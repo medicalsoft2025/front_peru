@@ -13,21 +13,20 @@ import { IntegrationConfig } from "./forms/IntegrationConfig";
 import { useSystemConfigs } from "../system-configs/hooks/useSystemConfigs";
 import { useSystemConfigCreate } from "../system-configs/hooks/useSystemConfigCreate";
 import { Toast } from "primereact/toast";
-import { IframeIntegration } from "./forms/IframeIntegration";
 import { FeIntegrationsForm } from "./forms/FeIntegrationsForm";
+import { IframeIntegration } from "./forms/IframeIntegration";
 
-export const IntegrationsApp = () => {
-  const { systemConfigs: configs, refetch, getConfig } = useSystemConfigs();
-  const { createSystemConfig, toast } = useSystemConfigCreate();
+export const IntegrationsApp: React.FC<any> = ({ companyId = null }) => {
 
-  const showTest2 = getConfig("TEST_SHOW_TEST_2");
+    const { systemConfigs: configs, refetch, getConfig } = useSystemConfigs();
+    const { createSystemConfig, toast } = useSystemConfigCreate();
+      const showTest2 = getConfig("TEST_SHOW_TEST_2");
 
-  const handleSubmit = async (data: any) => {
-    const systemConfigs =
-      SystemConfigHelper.formatDataToSystemConfigArray(data);
-    await createSystemConfig(systemConfigs);
-    refetch();
-  };
+    const handleSubmit = async (data: any) => {
+        const systemConfigs = SystemConfigHelper.formatDataToSystemConfigArray(data);
+        await createSystemConfig(systemConfigs, Number(companyId));
+        refetch();
+    }
 
   const tabs = [
 

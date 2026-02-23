@@ -336,7 +336,7 @@ const BillingConfigTab = ({
     }, /*#__PURE__*/React.createElement("label", {
       htmlFor: `dian_prefix_${tipo}`,
       className: "font-medium block mb-2"
-    }, "Prefijo DGII ", /*#__PURE__*/React.createElement("span", {
+    }, "Prefijo Sunat ", /*#__PURE__*/React.createElement("span", {
       className: "text-danger"
     }, "*")), /*#__PURE__*/React.createElement(InputText, _extends({
       id: `dian_prefix_${tipo}`

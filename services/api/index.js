@@ -84,6 +84,7 @@ import { FeCompaniesService } from "./FE/feCompaniesService.js";
 import { BoletasService} from "./FE/boletasServices.js";
 import { NotasCreditoSunatService } from "./FE/NotasCreditoSunatService.js";
 import { NotasDebitoSunatService } from "./FE/NotasDebitoSunatService.js";
+import BranchService from "./classes/branchService.js";
 
 
 export const authService = new AuthService("api/auth");
@@ -129,7 +130,7 @@ export const appointmentTypeService = new BaseApiService(
   "medical",
   "appointment-types"
 );
-export const branchService = new BaseApiService("medical", "branches");
+export const branchService = new BranchService("medical", "branches");
 
 export const clinicalRecordService = new ClinicalRecordService(
   "medical",

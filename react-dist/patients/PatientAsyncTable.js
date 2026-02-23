@@ -13,6 +13,9 @@ import { patientService } from "../../services/api/index.js";
 import { Controller, useForm } from "react-hook-form";
 import { InputSwitch } from "primereact/inputswitch";
 import { SwalManager } from "../../services/alertManagerImported.js";
+import { useCompanies } from "../companies/hooks/useCompanies.js";
+import { Dropdown } from "primereact/dropdown";
+import { Accordion, AccordionTab } from "primereact/accordion";
 export const PatientAsyncTable = () => {
   const [tableItems, setTableItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,12 +26,21 @@ export const PatientAsyncTable = () => {
   const [editingPatient, setEditingPatient] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [viewingPatientId, setViewingPatientId] = useState(null);
+  const [selectedCompany, setSelectedCompany] = useState(undefined);
+  const {
+    companies
+  } = useCompanies();
   const {
     patients,
-    fetchPatientsByFilters,
+    refetch,
     loading,
     totalRecords
-  } = usePatientsByFilters();
+  } = usePatientsByFilters({
+    search: search ?? "",
+    page: currentPage,
+    per_page: perPage,
+    company_id: selectedCompany
+  });
   const [modalNotificationsVisible, setModalNotificationsVisible] = useState(false);
   const {
     control,
@@ -51,34 +63,20 @@ export const PatientAsyncTable = () => {
     setFirst(page.first);
     setPerPage(page.rows);
     setCurrentPage(calculatedPage);
-    fetchPatientsByFilters({
-      per_page: page.rows,
-      page: calculatedPage,
-      search: search ?? ""
-    });
   };
   const handlePatientCreated = () => {
     setShowPatientModal(false);
-    refresh();
+    refetch();
   };
   const handlePatientUpdated = () => {
     setShowEditModal(false);
     setEditingPatient(null);
-    refresh();
+    refetch();
   };
   const handleSearchChange = _search => {
     setSearch(_search);
-    fetchPatientsByFilters({
-      per_page: perPage,
-      page: currentPage,
-      search: _search
-    });
   };
-  const refresh = () => fetchPatientsByFilters({
-    per_page: perPage,
-    page: currentPage,
-    search: search ?? ""
-  });
+  const refresh = () => refetch();
   const handleEditarPaciente = async patientId => {
     const patient = await patientService.get(patientId);
     if (patient) {
@@ -126,7 +124,8 @@ export const PatientAsyncTable = () => {
         age: age > 0 ? `${getAge(item.date_of_birth).toString()} años` : "--",
         dateLastAppointment: lastAppointment?.appointment_date || "--",
         whatsapp_notifications: item.whatsapp_notifications,
-        email_notifications: item.email_notifications
+        email_notifications: item.email_notifications,
+        companyName: item.company?.legal_name ?? "--"
       };
     });
     setTableItems(mappedPatients);
@@ -142,6 +141,9 @@ export const PatientAsyncTable = () => {
   }, {
     field: "documentNumber",
     header: "Nro. de documento"
+  }, {
+    field: "companyName",
+    header: "Empresa"
   }, {
     field: "phone",
     header: "Teléfono"
@@ -169,13 +171,39 @@ export const PatientAsyncTable = () => {
     style: {
       minHeight: "400px"
     }
+  }, /*#__PURE__*/React.createElement(Accordion, {
+    activeIndex: null
+  }, /*#__PURE__*/React.createElement(AccordionTab, {
+    header: "Filtros"
   }, /*#__PURE__*/React.createElement("div", {
+    className: "row"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "col-md-6 mb-2"
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "company",
+    className: "form-label"
+  }, "Empresa"), /*#__PURE__*/React.createElement(Dropdown, {
+    id: "company",
+    value: selectedCompany,
+    options: companies,
+    onChange: e => {
+      setSelectedCompany(e.value);
+      setCurrentPage(1);
+      setFirst(0);
+    },
+    optionLabel: "attributes.legal_name",
+    optionValue: "id",
+    placeholder: "Seleccione una empresa",
+    filter: true,
+    showClear: true,
+    className: "w-100 md:w-14rem"
+  }))))), /*#__PURE__*/React.createElement("div", {
     className: "card-body h-100 w-100 d-flex flex-column",
     style: {
       marginTop: "-15px"
     }
   }, /*#__PURE__*/React.createElement("div", {
-    className: "d-flex justify-content-end align-items-center mb-2"
+    className: "d-flex justify-content-end align-items-center mb-2 gap-2"
   }, /*#__PURE__*/React.createElement(Button, {
     label: "Nuevo Paciente ",
     className: "p-button-primary",

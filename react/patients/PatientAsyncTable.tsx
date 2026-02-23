@@ -17,6 +17,9 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { NotificationsFormInputs } from "./models/Patient";
 import { InputSwitch } from "primereact/inputswitch";
 import { SwalManager } from "../../services/alertManagerImported";
+import { useCompanies } from "../companies/hooks/useCompanies";
+import { Dropdown } from "primereact/dropdown";
+import { Accordion, AccordionTab } from "primereact/accordion";
 
 type PatientAsyncTableItem = {
     id: string;
@@ -25,6 +28,7 @@ type PatientAsyncTableItem = {
     phone: string;
     age: string;
     dateLastAppointment: string;
+    companyName: string;
 };
 
 export const PatientAsyncTable: React.FC = () => {
@@ -39,8 +43,15 @@ export const PatientAsyncTable: React.FC = () => {
     const [viewingPatientId, setViewingPatientId] = useState<string | null>(
         null
     );
-    const { patients, fetchPatientsByFilters, loading, totalRecords } =
-        usePatientsByFilters();
+    const [selectedCompany, setSelectedCompany] = useState<number | undefined>(undefined);
+    const { companies } = useCompanies();
+    const { patients, refetch, loading, totalRecords } =
+        usePatientsByFilters({
+            search: search ?? "",
+            page: currentPage,
+            per_page: perPage,
+            company_id: selectedCompany
+        });
     const [modalNotificationsVisible, setModalNotificationsVisible] =
         useState(false);
     const { control, handleSubmit, reset } = useForm<NotificationsFormInputs>({
@@ -60,39 +71,24 @@ export const PatientAsyncTable: React.FC = () => {
         setFirst(page.first);
         setPerPage(page.rows);
         setCurrentPage(calculatedPage);
-        fetchPatientsByFilters({
-            per_page: page.rows,
-            page: calculatedPage,
-            search: search ?? "",
-        });
     };
 
     const handlePatientCreated = () => {
         setShowPatientModal(false);
-        refresh();
+        refetch();
     };
 
     const handlePatientUpdated = () => {
         setShowEditModal(false);
         setEditingPatient(null);
-        refresh();
+        refetch();
     };
 
     const handleSearchChange = (_search: string) => {
         setSearch(_search);
-        fetchPatientsByFilters({
-            per_page: perPage,
-            page: currentPage,
-            search: _search,
-        });
     };
 
-    const refresh = () =>
-        fetchPatientsByFilters({
-            per_page: perPage,
-            page: currentPage,
-            search: search ?? "",
-        });
+    const refresh = () => refetch();
 
     const handleEditarPaciente = async (patientId: string) => {
         const patient = await patientService.get(patientId);
@@ -153,9 +149,8 @@ export const PatientAsyncTable: React.FC = () => {
                 return {
                     id: item.id.toString(),
                     patientName:
-                        `${item.first_name || ""} ${item.middle_name || ""} ${
-                            item.last_name || ""
-                        } ${item.second_last_name || ""}`.trim() || "--",
+                        `${item.first_name || ""} ${item.middle_name || ""} ${item.last_name || ""
+                            } ${item.second_last_name || ""}`.trim() || "--",
                     documentNumber: item.document_number,
                     phone: item.whatsapp || "--",
                     age:
@@ -166,6 +161,7 @@ export const PatientAsyncTable: React.FC = () => {
                         lastAppointment?.appointment_date || "--",
                     whatsapp_notifications: item.whatsapp_notifications,
                     email_notifications: item.email_notifications,
+                    companyName: item.company?.legal_name ?? "--",
                 };
             }
         );
@@ -187,6 +183,7 @@ export const PatientAsyncTable: React.FC = () => {
             },
         },
         { field: "documentNumber", header: "Nro. de documento" },
+        { field: "companyName", header: "Empresa" },
         { field: "phone", header: "Teléfono" },
         { field: "age", header: "Edad" },
         { field: "dateLastAppointment", header: "Fecha de última consulta" },
@@ -215,11 +212,36 @@ export const PatientAsyncTable: React.FC = () => {
                 className="card card-content-main text-body-emphasis rounded-3  w-100 w-md-100 w-lg-100 mx-auto"
                 style={{ minHeight: "400px" }}
             >
+                <Accordion activeIndex={null}>
+                    <AccordionTab header="Filtros">
+                        <div className="row">
+                            <div className="col-md-6 mb-2">
+                                <label htmlFor="company" className="form-label">Empresa</label>
+                                <Dropdown
+                                    id="company"
+                                    value={selectedCompany}
+                                    options={companies}
+                                    onChange={(e) => {
+                                        setSelectedCompany(e.value);
+                                        setCurrentPage(1);
+                                        setFirst(0);
+                                    }}
+                                    optionLabel="attributes.legal_name"
+                                    optionValue="id"
+                                    placeholder="Seleccione una empresa"
+                                    filter
+                                    showClear
+                                    className="w-100 md:w-14rem"
+                                />
+                            </div>
+                        </div>
+                    </AccordionTab>
+                </Accordion>
                 <div
                     className="card-body h-100 w-100 d-flex flex-column"
                     style={{ marginTop: "-15px" }}
                 >
-                    <div className="d-flex justify-content-end align-items-center mb-2">
+                    <div className="d-flex justify-content-end align-items-center mb-2 gap-2">
                         <Button
                             label="Nuevo Paciente "
                             className="p-button-primary"
@@ -356,41 +378,41 @@ const TableMenu: React.FC<{
     onActualizarPermisos,
     onVerMas,
 }) => {
-    const menu = useRef<Menu>(null);
+        const menu = useRef<Menu>(null);
 
-    return (
-        <>
-            <Button
-                label="Acciones"
-                className="p-button-primary flex items-center"
-                onClick={(e) => menu.current?.toggle(e)}
-                aria-controls={`popup_menu_${patientId}`}
-                aria-haspopup
-                icon={<i className="fa fa-cog me-2"></i>}
-            ></Button>
-            <Menu
-                model={[
-                    {
-                        label: "Ver más",
-                        icon: <i className="fas fa-eye me-2"></i>,
-                        command: () => onVerMas(patientId),
-                    },
-                    {
-                        label: "Editar paciente",
-                        icon: <i className="fas fa-pencil-alt me-2"></i>,
-                        command: () => onEditarPaciente(patientId),
-                    },
-                    {
-                        label: "Actualizar permisos de notificaciones",
-                        icon: <i className="fas fa-bell me-2"></i>,
-                        command: () => onActualizarPermisos(rowData),
-                    },
-                ]}
-                popup
-                ref={menu}
-                id={`popup_menu_${patientId}`}
-                style={{ zIndex: 9999 }}
-            />
-        </>
-    );
-};
+        return (
+            <>
+                <Button
+                    label="Acciones"
+                    className="p-button-primary flex items-center"
+                    onClick={(e) => menu.current?.toggle(e)}
+                    aria-controls={`popup_menu_${patientId}`}
+                    aria-haspopup
+                    icon={<i className="fa fa-cog me-2"></i>}
+                ></Button>
+                <Menu
+                    model={[
+                        {
+                            label: "Ver más",
+                            icon: <i className="fas fa-eye me-2"></i>,
+                            command: () => onVerMas(patientId),
+                        },
+                        {
+                            label: "Editar paciente",
+                            icon: <i className="fas fa-pencil-alt me-2"></i>,
+                            command: () => onEditarPaciente(patientId),
+                        },
+                        {
+                            label: "Actualizar permisos de notificaciones",
+                            icon: <i className="fas fa-bell me-2"></i>,
+                            command: () => onActualizarPermisos(rowData),
+                        },
+                    ]}
+                    popup
+                    ref={menu}
+                    id={`popup_menu_${patientId}`}
+                    style={{ zIndex: 9999 }}
+                />
+            </>
+        );
+    };

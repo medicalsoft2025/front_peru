@@ -19,6 +19,9 @@ import { SwalManager } from "../../services/alertManagerImported";
 import { RescheduleAppointmentModalV2 } from "./RescheduleAppointmentModalV2";
 import { usePRToast } from "../hooks/usePRToast";
 import { Toast } from "primereact/toast";
+import { Accordion, AccordionTab } from "primereact/accordion";
+import { Dropdown } from "primereact/dropdown";
+import { useCompanies } from "../companies/hooks/useCompanies";
 
 interface TodayAppointmentsTableProps {
   onPrintItem?: (id: string, title: string) => void;
@@ -39,11 +42,13 @@ export const TodayAppointmentsTable: React.FC<
   const [selectedAppointmentId, setSelectedAppointmentId] = useState<string | null>(null);
   const { toast, showSuccessToast } = usePRToast();
 
+  const { companies } = useCompanies();
+
   const customFilters = () => {
     return {
       appointmentState: "pending",
       appointmentDate: getLocalTodayISODate(),
-      sort: "-appointment_date,appointment_time",
+      sort: "-appointment_date,appointment_time"
     };
   };
 
@@ -56,6 +61,8 @@ export const TodayAppointmentsTable: React.FC<
     first,
     loading,
     perPage,
+    companyId,
+    setCompanyId
   } = useFetchAppointments(customFilters);
 
   // useEffect(() => {
@@ -131,6 +138,7 @@ export const TodayAppointmentsTable: React.FC<
       ),
     },
     { field: "patientDNI", header: "Número de documento" },
+    { field: "companyName", header: "Empresa" },
     { field: "date", header: "Fecha Consulta" },
     { field: "time", header: "Hora Consulta" },
     { field: "doctorName", header: "Profesional asignado" },
@@ -161,8 +169,31 @@ export const TodayAppointmentsTable: React.FC<
         className="card text-body-emphasis rounded-3 p-3 w-100 w-md-100 w-lg-100 mx-auto"
         style={{ minHeight: "400px", marginTop: "-20px" }}
       >
+        <Accordion activeIndex={null}>
+          <AccordionTab header="Filtros">
+            <div className="row">
+              <div className="col-md-6 mb-2">
+                <label htmlFor="company" className="form-label">Empresa</label>
+                <Dropdown
+                  id="company"
+                  value={companyId}
+                  options={companies}
+                  onChange={(e) => {
+                    setCompanyId(e.value);
+                  }}
+                  optionLabel="attributes.legal_name"
+                  optionValue="id"
+                  placeholder="Seleccione una empresa"
+                  filter
+                  showClear
+                  className="w-100 md:w-14rem"
+                />
+              </div>
+            </div>
+          </AccordionTab>
+        </Accordion>
         <div className="card-body h-100 w-100 d-flex flex-column">
-          <div className="d-flex justify-content-end gap-3 mb-2 botones-responsive" style={{ marginTop: "-30px" }}>
+          <div className="d-flex justify-content-end gap-3 mb-2">
             <Button
               label="Control de turnos"
               icon={<i className="fa-solid fa-clock me-2">‌</i>}

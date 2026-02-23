@@ -6,9 +6,11 @@ import { IntegrationConfig } from "./forms/IntegrationConfig.js";
 import { useSystemConfigs } from "../system-configs/hooks/useSystemConfigs.js";
 import { useSystemConfigCreate } from "../system-configs/hooks/useSystemConfigCreate.js";
 import { Toast } from "primereact/toast";
-import { IframeIntegration } from "./forms/IframeIntegration.js";
 import { FeIntegrationsForm } from "./forms/FeIntegrationsForm.js";
-export const IntegrationsApp = () => {
+import { IframeIntegration } from "./forms/IframeIntegration.js";
+export const IntegrationsApp = ({
+  companyId = null
+}) => {
   const {
     systemConfigs: configs,
     refetch,
@@ -21,7 +23,7 @@ export const IntegrationsApp = () => {
   const showTest2 = getConfig("TEST_SHOW_TEST_2");
   const handleSubmit = async data => {
     const systemConfigs = SystemConfigHelper.formatDataToSystemConfigArray(data);
-    await createSystemConfig(systemConfigs);
+    await createSystemConfig(systemConfigs, Number(companyId));
     refetch();
   };
   const tabs = [{

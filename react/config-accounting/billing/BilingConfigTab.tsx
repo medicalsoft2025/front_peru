@@ -448,7 +448,7 @@ const BillingConfigTab: React.FC<BillingConfigTabProps> = ({
                 htmlFor={`dian_prefix_${tipo}`}
                 className="font-medium block mb-2"
               >
-                Prefijo DGII <span className="text-danger">*</span>
+                Prefijo Sunat <span className="text-danger">*</span>
               </label>
               <InputText
                 id={`dian_prefix_${tipo}`}

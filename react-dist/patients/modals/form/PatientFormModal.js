@@ -1,5 +1,6 @@
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 import React, { useState, useRef, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "primereact/button";
 import { Stepper } from "primereact/stepper";
 import { Dialog } from "primereact/dialog";
@@ -25,6 +26,7 @@ const PatientFormModal = ({
   onSuccess,
   patientData
 }) => {
+  const queryClient = useQueryClient();
   const stepperRef = useRef(null);
   const [hasCompanion, setHasCompanion] = useState(false);
   const [companions, setCompanions] = useState([]);
@@ -623,6 +625,9 @@ const PatientFormModal = ({
           window.location.reload();
         }, 2000);
       }
+      queryClient.invalidateQueries({
+        queryKey: ["patients"]
+      });
       onHide();
       if (onSuccess) onSuccess();
     } catch (error) {

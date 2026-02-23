@@ -1,42 +1,44 @@
-import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { patientService } from "../../../services/api/index.js";
-import { ErrorHandler } from "../../../services/errorHandler.js";
 import { cleanJsonObject } from "../../../services/utilidades.js";
-export const usePatientsByFilters = () => {
-  const [patients, setPatients] = useState([]);
-  const [totalRecords, setTotalRecords] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const fetchPatientsByFilters = async ({
+export const usePatientsByFilters = filters => {
+  const {
     search = "",
     per_page = 10,
-    page = 1
-  }) => {
-    setLoading(true);
-    try {
-      const data = await patientService.getByFilters(cleanJsonObject({
+    page = 1,
+    company_id
+  } = filters;
+  const {
+    data,
+    isLoading,
+    isFetching,
+    refetch,
+    error
+  } = useQuery({
+    queryKey: ['patients', search, per_page, page, company_id],
+    queryFn: async () => {
+      const response = await patientService.getByFilters(cleanJsonObject({
         search,
         per_page,
-        page
+        page,
+        company_id
       }));
-      const mappedData = data.data.data.map(item => {
-        return {
-          ...item,
-          label: `${item.first_name} ${item.middle_name} ${item.last_name} ${item.second_last_name}`
-        };
-      });
-      setTotalRecords(data.data.total);
-      setPatients(mappedData);
-    } catch (err) {
-      console.error(err);
-      ErrorHandler.generic(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+      const patients = response.data.data.map(item => ({
+        ...item,
+        label: `${item.first_name} ${item.middle_name} ${item.last_name} ${item.second_last_name}`
+      }));
+      return {
+        patients,
+        totalRecords: response.data.total
+      };
+    },
+    keepPreviousData: true // Keep data while fetching new page
+  });
   return {
-    patients,
-    fetchPatientsByFilters,
-    totalRecords,
-    loading
+    patients: data?.patients || [],
+    totalRecords: data?.totalRecords || 0,
+    loading: isLoading || isFetching,
+    refetch,
+    error
   };
 };

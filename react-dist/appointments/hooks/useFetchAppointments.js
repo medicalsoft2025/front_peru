@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery } from '@tanstack/react-query';
 import { appointmentService } from "../../../services/api/index.js";
 const getEstado = appointment => {
   const stateId = appointment.appointment_state_id.toString();
@@ -27,12 +28,11 @@ const getEstado = appointment => {
   }
 };
 export const useFetchAppointments = (getCustomFilters, customMapper) => {
-  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [companyId, setCompanyId] = useState(null);
   const [first, setFirst] = useState(0);
   const [perPage, setPerPage] = useState(10);
   const [search, setSearch] = useState(null);
-  const [totalRecords, setTotalRecords] = useState(0);
   const defaultMapper = appointment => {
     const doctorFirstName = appointment.user_availability.user.first_name || "";
     const doctorMiddleName = appointment.user_availability.user.middle_name || "";
@@ -66,53 +66,60 @@ export const useFetchAppointments = (getCustomFilters, customMapper) => {
       orders: appointment?.exam_orders,
       exam_recipe_id: appointment?.exam_recipe_id,
       patientEmail: appointment?.patient.email,
-      patientPhone: appointment?.patient.whatsapp
+      patientPhone: appointment?.patient.whatsapp,
+      companyName: appointment?.company?.legal_name || "--"
     };
   };
   const mapper = customMapper || defaultMapper;
-  const [appointments, setAppointments] = useState([]);
-  const fetchAppointments = async (perPage, page = 1, _search = null) => {
-    try {
-      setLoading(true);
-      const filters = typeof getCustomFilters === 'function' ? getCustomFilters() : {};
-      const data = await appointmentService.filterAppointments({
-        per_page: perPage,
-        page: page,
-        search: _search || "",
-        ...filters
-      });
-      setAppointments(data.data.data.map(appointment => mapper(appointment)));
-      setTotalRecords(data.data.total);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    data,
+    isLoading,
+    isFetching,
+    refetch
+  } = useQuery({
+    queryKey: ['appointments', search, perPage, currentPage, companyId],
+    queryFn: async () => {
+      try {
+        const filters = typeof getCustomFilters === 'function' ? getCustomFilters() : {};
+        const data = await appointmentService.filterAppointments({
+          per_page: perPage,
+          page: currentPage,
+          search: search || "",
+          ...filters,
+          company_id: companyId
+        });
+        return {
+          appointments: data.data.data.map(appointment => mapper(appointment)),
+          totalRecords: data.data.total
+        };
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    keepPreviousData: true // Keep data while fetching new page
+  });
   const handlePageChange = page => {
     const calculatedPage = Math.floor(page.first / page.rows) + 1;
     setFirst(page.first);
     setPerPage(page.rows);
     setCurrentPage(calculatedPage);
-    fetchAppointments(page.rows, calculatedPage, search);
   };
   const handleSearchChange = _search => {
     setSearch(_search);
-    fetchAppointments(perPage, currentPage, _search);
   };
-  const refresh = () => fetchAppointments(perPage, currentPage, search);
-  useEffect(() => {
-    fetchAppointments(perPage);
-  }, []);
+  const refresh = () => refetch();
   return {
-    appointments,
-    fetchAppointments,
+    appointments: data?.appointments || [],
     handlePageChange,
     handleSearchChange,
     refresh,
-    totalRecords,
+    companyId,
+    setCompanyId,
+    totalRecords: data?.totalRecords || 0,
     first,
     perPage,
-    loading
+    currentPage,
+    search,
+    loading: isLoading || isFetching
   };
 };

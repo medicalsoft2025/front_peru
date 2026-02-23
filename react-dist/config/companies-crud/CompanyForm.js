@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { TabView, TabPanel } from 'primereact/tabview';
+import React, { useState } from "react";
+import { TabView, TabPanel } from "primereact/tabview";
 import GeneralInfoForm from "./components/GeneralInfoForm.js";
 import RepresentativeTab from "../company-configuration/components/RepresentativeTab.js";
 import CommunicationsTab from "../company-configuration/components/CommunicationsTab.js";
 import BranchesTab from "../company-configuration/components/BranchesTab.js";
+import IntegrationsTab from "../company-configuration/components/IntegrationsTab.js";
 export const CompanyForm = ({
   company,
   onClose,
@@ -61,6 +62,11 @@ export const CompanyForm = ({
     header: getTabHeader("fa-solid fa-location-dot", "Sedes"),
     disabled: isNew
   }, /*#__PURE__*/React.createElement(BranchesTab, {
+    companyId: companyId
+  })), /*#__PURE__*/React.createElement(TabPanel, {
+    header: getTabHeader("fa-solid fa-location-dot", "Integraciones"),
+    disabled: isNew
+  }, /*#__PURE__*/React.createElement(IntegrationsTab, {
     companyId: companyId
   }))))));
 };

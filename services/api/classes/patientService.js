@@ -58,13 +58,14 @@ export class PatientService extends BaseApiService {
         );
     }
 
-    async getByFilters({ search, per_page = 10, page = 1 }) {
+    async getByFilters({ search, per_page = 10, page = 1, company_id }) {
         return await this.httpClient.get(
             `medical/v2/patients-clinical-records`,
             {
                 per_page,
                 page,
                 search,
+                company_id,
             }
         );
     }

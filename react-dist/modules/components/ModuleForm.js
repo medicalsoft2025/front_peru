@@ -6,12 +6,15 @@ import { Controller, useForm } from "react-hook-form";
 import { classNames } from "primereact/utils";
 import { ticketService } from "../../../services/api/index.js";
 import { MultiSelect } from "primereact/multiselect";
+import { getUserLogged } from "../../../services/utilidades.js";
 export const ModuleForm = ({
   formId,
   onHandleSubmit,
   initialData
 }) => {
   const [allowedReasonsOptions, setAllowedReasonsOptions] = useState([]);
+  const userLogged = getUserLogged();
+  const [availabilities, setAvailabilities] = useState(null);
   const {
     control,
     handleSubmit,
@@ -26,7 +29,14 @@ export const ModuleForm = ({
       allowed_reasons: []
     }
   });
-  const onSubmit = data => onHandleSubmit(data);
+  const onSubmit = data => {
+    const payload = {
+      allowed_reasons: data.allowed_reasons,
+      name: data.name,
+      branch_id: availabilities?.branch_id.toString() || "2"
+    };
+    onHandleSubmit(payload);
+  };
   const {
     branches
   } = useBranchesForSelect();
@@ -44,6 +54,16 @@ export const ModuleForm = ({
   //     });
   // }, [initialData, reset]);
 
+  useEffect(() => {
+    setAvailabilities(getTodayAvailability(userLogged.availabilities));
+  }, []);
+  function getTodayAvailability(availabilities) {
+    const today = new Date();
+    const currentDayOfWeek = today.getDay();
+    return availabilities.filter(availability => {
+      return availability.days_of_week.includes(currentDayOfWeek);
+    })[0];
+  }
   useEffect(() => {
     const fetchReasons = async () => {
       try {

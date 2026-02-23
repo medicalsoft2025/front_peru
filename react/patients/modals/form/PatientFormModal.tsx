@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "primereact/button";
 import { Stepper } from "primereact/stepper";
 import { Dialog } from "primereact/dialog";
@@ -41,6 +42,7 @@ const PatientFormModal: React.FC<PatientFormModalProps> = ({
     onSuccess,
     patientData,
 }) => {
+    const queryClient = useQueryClient();
     const stepperRef = useRef<any>(null);
     const [hasCompanion, setHasCompanion] = useState(false);
     const [companions, setCompanions] = useState<Companion[]>([]);
@@ -99,15 +101,15 @@ const PatientFormModal: React.FC<PatientFormModalProps> = ({
             },
         },
     });
-const documentTypeOptions = [
-    { label: "DNI - Documento Nacional de Identidad", value: "1" },
-    { label: "CE - Carné de Extranjería", value: "4" },
-    { label: "RUC - Registro Único de Contribuyentes", value: "6" },
-    { label: "Pasaporte", value: "7" },
-    { label: "PTP - Permiso Temporal de Permanencia", value: "A" },
-    { label: "CDI - Carné de Diplomático", value: "B" },
-    { label: "Otros", value: "0" },
-];
+    const documentTypeOptions = [
+        { label: "DNI - Documento Nacional de Identidad", value: "1" },
+        { label: "CE - Carné de Extranjería", value: "4" },
+        { label: "RUC - Registro Único de Contribuyentes", value: "6" },
+        { label: "Pasaporte", value: "7" },
+        { label: "PTP - Permiso Temporal de Permanencia", value: "A" },
+        { label: "CDI - Carné de Diplomático", value: "B" },
+        { label: "Otros", value: "0" },
+    ];
 
 
     const genderOptions = [
@@ -728,6 +730,7 @@ const documentTypeOptions = [
                     window.location.reload();
                 }, 2000);
             }
+            queryClient.invalidateQueries({ queryKey: ["patients"] });
             onHide();
             if (onSuccess) onSuccess();
         } catch (error: any) {
@@ -770,9 +773,8 @@ const documentTypeOptions = [
             toast.current?.show({
                 severity: "error",
                 summary: "Error",
-                detail: `Por favor complete todos los campos requeridos en el paso ${
-                    stepIndex + 1
-                }`,
+                detail: `Por favor complete todos los campos requeridos en el paso ${stepIndex + 1
+                    }`,
                 life: 3000,
             });
         }
