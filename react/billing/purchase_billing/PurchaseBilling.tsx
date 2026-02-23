@@ -382,8 +382,8 @@ const PriceColumnBody = React.memo(
                         placeholder="Precio"
                         className="w-100 price-input"
                         mode="currency"
-                        currency="DOP"
-                        locale="es-DO"
+                        currency="PEN"
+                        locale="es-PE"
                         min={0}
                         onValueChange={(e: any) => field.onChange(e.value)}
                         disabled={disabled}
@@ -451,9 +451,9 @@ const DiscountColumnBody = React.memo(
                                     : "decimal"
                             }
                             currency={
-                                discountType === "fixed" ? "DOP" : undefined
+                                discountType === "fixed" ? "PEN" : undefined
                             }
-                            locale="es-DO"
+                            locale="es-PE"
                             min={0}
                             max={
                                 discountType === "percentage" ? 100 : undefined
@@ -756,7 +756,7 @@ const ProductAccordion = React.memo(
                         </span>
                         <span className="badge bg-success">
                             Total:{" "}
-                            {(product.quantity * product.price).toFixed(2)} DOP
+                            {(product.quantity * product.price).toFixed(2)} PEN
                         </span>
                     </div>
                 </div>
@@ -869,8 +869,8 @@ const ProductAccordion = React.memo(
                                             value={total}
                                             mode="currency"
                                             className="w-100"
-                                            currency="DOP"
-                                            locale="es-DO"
+                                            currency="PEN"
+                                            locale="es-PE"
                                             readOnly
                                             inputClassName="form-control bg-light"
                                         />
@@ -2380,7 +2380,7 @@ export const PurchaseBilling: React.FC<PurchaseBillingProps> = ({
                             <div className="card-header bg-light d-flex justify-content-between align-items-center p-3">
                                 <h2 className="h5 mb-0">
                                     <i className="pi pi-credit-card me-2 text-primary"></i>
-                                    Métodos de Pago (DOP)
+                                    Métodos de Pago (PEN)
                                 </h2>
                                 <Button
                                     label="Agregar Método"
@@ -2463,8 +2463,8 @@ export const PurchaseBilling: React.FC<PurchaseBillingProps> = ({
                                                     placeholder="Ingrese valor"
                                                     className="w-100"
                                                     mode="currency"
-                                                    currency="DOP"
-                                                    locale="es-DO"
+                                                    currency="PEN"
+                                                    locale="es-PE"
                                                     min={0}
                                                     onValueChange={(e) =>
                                                         handlePaymentChange(
@@ -2521,8 +2521,8 @@ export const PurchaseBilling: React.FC<PurchaseBillingProps> = ({
                                                         }
                                                         className="me-3"
                                                         mode="currency"
-                                                        currency="DOP"
-                                                        locale="es-DO"
+                                                        currency="PEN"
+                                                        locale="es-PE"
                                                         minFractionDigits={2}
                                                         maxFractionDigits={3}
                                                         readOnly
@@ -2540,8 +2540,8 @@ export const PurchaseBilling: React.FC<PurchaseBillingProps> = ({
                                                         value={calculateTotalPayments()}
                                                         className="me-3"
                                                         mode="currency"
-                                                        currency="DOP"
-                                                        locale="es-DO"
+                                                        currency="PEN"
+                                                        locale="es-PE"
                                                         minFractionDigits={2}
                                                         maxFractionDigits={3}
                                                         readOnly
@@ -2561,7 +2561,7 @@ export const PurchaseBilling: React.FC<PurchaseBillingProps> = ({
                                                                     0) -
                                                                 calculateTotalPayments()
                                                             ).toFixed(2)}{" "}
-                                                            DOP
+                                                            PEN
                                                         </span>
                                                     ) : (
                                                         <span className="text-success">
@@ -2582,7 +2582,7 @@ export const PurchaseBilling: React.FC<PurchaseBillingProps> = ({
                             <div className="card-header bg-light p-3">
                                 <h2 className="h5 mb-0">
                                     <i className="pi pi-calculator me-2 text-primary"></i>
-                                    Totales (DOP)
+                                    Totales (PEN)
                                 </h2>
                             </div>
                             <div className="card-body p-3">
@@ -2637,8 +2637,8 @@ export const PurchaseBilling: React.FC<PurchaseBillingProps> = ({
                                                     value={item.value}
                                                     className="w-100"
                                                     mode="currency"
-                                                    currency="DOP"
-                                                    locale="es-DO"
+                                                    currency="PEN"
+                                                    locale="es-PE"
                                                     readOnly
                                                     inputClassName={
                                                         item.highlight

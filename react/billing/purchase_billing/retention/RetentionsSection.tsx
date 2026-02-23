@@ -148,7 +148,7 @@ export const RetentionsSection: React.FC<RetentionsSectionProps> = ({
       <div className="card-header bg-light d-flex justify-content-between align-items-center">
         <h2 className="h5 mb-0">
           <i className="pi pi-percentage me-2 text-primary"></i>
-          Retenciones (DOP)
+          Retenciones (PEN)
         </h2>
         <Button
           type="button"
@@ -166,8 +166,8 @@ export const RetentionsSection: React.FC<RetentionsSectionProps> = ({
             <InputNumber
               value={calculateBaseAmount()}
               mode="currency"
-              currency="DOP"
-              locale="es-DO"
+              currency="PEN"
+              locale="es-PE"
               readOnly
               className="ml-2"
             />
@@ -206,8 +206,8 @@ export const RetentionsSection: React.FC<RetentionsSectionProps> = ({
                   <InputNumber
                     value={retention.value || 0}
                     mode="currency"
-                    currency="DOP"
-                    locale="es-DO"
+                    currency="PEN"
+                    locale="es-PE"
                     className="w-100"
                     readOnly
                   />
@@ -233,8 +233,8 @@ export const RetentionsSection: React.FC<RetentionsSectionProps> = ({
               <InputNumber
                 value={retentions.reduce((sum, r) => sum + (r.value || 0), 0)}
                 mode="currency"
-                currency="DOP"
-                locale="es-DO"
+                currency="PEN"
+                locale="es-PE"
                 className="font-weight-bold"
                 readOnly
               />

@@ -148,12 +148,12 @@ export const DebitCreditNotes = () => {
     loadNotes(1, rows);
   };
   const formatCurrency = value => {
-    return value?.toLocaleString("es-DO", {
+    return value.toLocaleString("es-PE", {
       style: "currency",
-      currency: "DOP",
+      currency: "PEN",
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
-    }) || "$0.00";
+    });
   };
   const getTipoNotaSeverity = tipo => {
     return tipo === "debit" ? "danger" : "success";

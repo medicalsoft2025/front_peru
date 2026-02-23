@@ -248,8 +248,8 @@ const PriceColumnBody = /*#__PURE__*/React.memo(({
       placeholder: "Precio",
       className: "w-100 price-input",
       mode: "currency",
-      currency: "DOP",
-      locale: "es-DO",
+      currency: "PEN",
+      locale: "es-PE",
       min: 0,
       onValueChange: e => field.onChange(e.value),
       disabled: disabled,
@@ -304,8 +304,8 @@ const DiscountColumnBody = /*#__PURE__*/React.memo(({
       suffix: discountType === "percentage" ? "%" : "",
       prefix: discountType === "fixed" ? "$ " : "",
       mode: discountType === "fixed" ? "currency" : "decimal",
-      currency: discountType === "fixed" ? "DOP" : undefined,
-      locale: "es-DO",
+      currency: discountType === "fixed" ? "PEN" : undefined,
+      locale: "es-PE",
       min: 0,
       max: discountType === "percentage" ? 100 : undefined,
       onValueChange: e => field.onChange(e.value),
@@ -492,7 +492,7 @@ const ProductAccordion = /*#__PURE__*/React.memo(({
     className: "badge bg-primary me-2"
   }, "Cantidad: ", product.quantity), /*#__PURE__*/React.createElement("span", {
     className: "badge bg-success"
-  }, "Total:", " ", (product.quantity * product.price).toFixed(2), " DOP"))), product.isExpanded && /*#__PURE__*/React.createElement("div", {
+  }, "Total:", " ", (product.quantity * product.price).toFixed(2), " PEN"))), product.isExpanded && /*#__PURE__*/React.createElement("div", {
     className: "card-body"
   }, /*#__PURE__*/React.createElement(DataTable, {
     value: [product],
@@ -588,8 +588,8 @@ const ProductAccordion = /*#__PURE__*/React.memo(({
         value: total,
         mode: "currency",
         className: "w-100",
-        currency: "DOP",
-        locale: "es-DO",
+        currency: "PEN",
+        locale: "es-PE",
         readOnly: true,
         inputClassName: "form-control bg-light"
       });
@@ -1689,7 +1689,7 @@ export const PurchaseBilling = ({
     className: "h5 mb-0"
   }, /*#__PURE__*/React.createElement("i", {
     className: "pi pi-credit-card me-2 text-primary"
-  }), "M\xE9todos de Pago (DOP)"), /*#__PURE__*/React.createElement(Button, {
+  }), "M\xE9todos de Pago (PEN)"), /*#__PURE__*/React.createElement(Button, {
     label: "Agregar M\xE9todo",
     className: "p-button-primary",
     onClick: e => {
@@ -1748,8 +1748,8 @@ export const PurchaseBilling = ({
     placeholder: "Ingrese valor",
     className: "w-100",
     mode: "currency",
-    currency: "DOP",
-    locale: "es-DO",
+    currency: "PEN",
+    locale: "es-PE",
     min: 0,
     onValueChange: e => handlePaymentChange(payment.id, "value", e.value || null),
     inputClassName: "form-control"
@@ -1786,8 +1786,8 @@ export const PurchaseBilling = ({
     value: calculateTotal() || 0,
     className: "me-3",
     mode: "currency",
-    currency: "DOP",
-    locale: "es-DO",
+    currency: "PEN",
+    locale: "es-PE",
     minFractionDigits: 2,
     maxFractionDigits: 3,
     readOnly: true,
@@ -1803,8 +1803,8 @@ export const PurchaseBilling = ({
     value: calculateTotalPayments(),
     className: "me-3",
     mode: "currency",
-    currency: "DOP",
-    locale: "es-DO",
+    currency: "PEN",
+    locale: "es-PE",
     minFractionDigits: 2,
     maxFractionDigits: 3,
     readOnly: true,
@@ -1818,7 +1818,7 @@ export const PurchaseBilling = ({
     className: "text-danger"
   }, /*#__PURE__*/React.createElement("i", {
     className: "pi pi-exclamation-triangle me-1"
-  }), "Faltan", " ", ((calculateTotal() || 0) - calculateTotalPayments()).toFixed(2), " ", "DOP") : /*#__PURE__*/React.createElement("span", {
+  }), "Faltan", " ", ((calculateTotal() || 0) - calculateTotalPayments()).toFixed(2), " ", "PEN") : /*#__PURE__*/React.createElement("span", {
     className: "text-success"
   }, /*#__PURE__*/React.createElement("i", {
     className: "pi pi-check-circle me-1"
@@ -1830,7 +1830,7 @@ export const PurchaseBilling = ({
     className: "h5 mb-0"
   }, /*#__PURE__*/React.createElement("i", {
     className: "pi pi-calculator me-2 text-primary"
-  }), "Totales (DOP)")), /*#__PURE__*/React.createElement("div", {
+  }), "Totales (PEN)")), /*#__PURE__*/React.createElement("div", {
     className: "card-body p-3"
   }, /*#__PURE__*/React.createElement("div", {
     className: "row g-3"
@@ -1867,8 +1867,8 @@ export const PurchaseBilling = ({
     value: item.value,
     className: "w-100",
     mode: "currency",
-    currency: "DOP",
-    locale: "es-DO",
+    currency: "PEN",
+    locale: "es-PE",
     readOnly: true,
     inputClassName: item.highlight ? "form-control bg-light fw-bold" : "form-control bg-light"
   }))))))), /*#__PURE__*/React.createElement("div", {

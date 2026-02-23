@@ -217,9 +217,9 @@ export const BillingEntity = () => {
 
   // Formatear número para montos en pesos dominicanos (DOP)
   const formatCurrency = value => {
-    return value.toLocaleString("es-DO", {
+    return value.toLocaleString("es-PE", {
       style: "currency",
-      currency: "DOP",
+      currency: "PEN",
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });

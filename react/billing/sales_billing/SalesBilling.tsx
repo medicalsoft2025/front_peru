@@ -452,7 +452,7 @@ export const SalesBilling: React.FC<any> = ({
       window["toast"].show({
         severity: "success",
         summary: "Éxito",
-        detail: `Valor ${amountToSet.toFixed(2)} DOP copiado al método de pago`,
+        detail: `Valor ${amountToSet.toFixed(2)} PEN copiado al método de pago`,
         life: 3000,
       });
     } else {
@@ -586,8 +586,8 @@ export const SalesBilling: React.FC<any> = ({
           <InputNumber
             value={calculateLineTotal(rowData)}
             mode="currency"
-            currency="DOP"
-            locale="es-DO"
+            currency="PEN"
+            locale="es-PE"
             readOnly
             inputClassName="form-control bg-light"
             style={{ minWidth: "200px" }}
@@ -595,6 +595,7 @@ export const SalesBilling: React.FC<any> = ({
         ),
         style: { minWidth: "150px" },
       },
+      
       {
         field: "actions",
         header: "Acciones",
@@ -640,9 +641,9 @@ export const SalesBilling: React.FC<any> = ({
         summary: "Error",
         detail: `Los métodos de pago (${calculateTotalPayments().toFixed(
           2,
-        )} DOP) no cubren el total de la factura (${calculateTotal().toFixed(
+        )} PEN) no cubren el total de la factura (${calculateTotal().toFixed(
           2,
-        )} DOP)`,
+        )} PEN)`,
         life: 5000,
       });
       return;
@@ -1020,7 +1021,7 @@ export const SalesBilling: React.FC<any> = ({
               <div className="card-header bg-light d-flex justify-content-between align-items-center p-3">
                 <h2 className="h5 mb-0">
                   <i className="pi pi-credit-card me-2 text-primary"></i>
-                  Métodos de Pago (DOP)
+                  Métodos de Pago (PEN)
                 </h2>
                 <Button
                   label="Agregar Método"
@@ -1072,8 +1073,8 @@ export const SalesBilling: React.FC<any> = ({
                             placeholder="RD$ 0.00"
                             className="flex-grow-1"
                             mode="currency"
-                            currency="DOP"
-                            locale="es-DO"
+                            currency="PEN"
+                            locale="es-PE"
                             min={0}
                             onValueChange={(e) =>
                               handlePaymentChange(
@@ -1126,8 +1127,8 @@ export const SalesBilling: React.FC<any> = ({
                             value={calculateTotal()}
                             className="me-3"
                             mode="currency"
-                            currency="DOP"
-                            locale="es-DO"
+                            currency="PEN"
+                            locale="es-PE"
                             minFractionDigits={2}
                             maxFractionDigits={3}
                             readOnly
@@ -1141,8 +1142,8 @@ export const SalesBilling: React.FC<any> = ({
                             value={calculateTotalPayments()}
                             className="me-3"
                             mode="currency"
-                            currency="DOP"
-                            locale="es-DO"
+                            currency="PEN"
+                            locale="es-PE"
                             minFractionDigits={2}
                             maxFractionDigits={3}
                             readOnly
@@ -1158,7 +1159,7 @@ export const SalesBilling: React.FC<any> = ({
                               {(
                                 calculateTotal() - calculateTotalPayments()
                               ).toFixed(2)}{" "}
-                              DOP
+                              PEN
                             </span>
                           ) : (
                             <span className="text-success">
@@ -1195,7 +1196,7 @@ export const SalesBilling: React.FC<any> = ({
               <div className="card-header bg-light p-3">
                 <h2 className="h5 mb-0">
                   <i className="pi pi-calculator me-2 text-primary"></i>
-                  Totales (DOP)
+                  Totales (PEN)
                 </h2>
               </div>
               <div className="card-body p-3">
@@ -1207,8 +1208,8 @@ export const SalesBilling: React.FC<any> = ({
                         value={calculateSubtotal()}
                         className="w-100"
                         mode="currency"
-                        currency="DOP"
-                        locale="es-DO"
+                        currency="PEN"
+                        locale="es-PE"
                         readOnly
                         inputClassName="form-control bg-light"
                       />
@@ -1221,8 +1222,8 @@ export const SalesBilling: React.FC<any> = ({
                         value={calculateTotalDiscount()}
                         className="w-100"
                         mode="currency"
-                        currency="DOP"
-                        locale="es-DO"
+                        currency="PEN"
+                        locale="es-PE"
                         readOnly
                         inputClassName="form-control bg-light"
                       />
@@ -1238,8 +1239,8 @@ export const SalesBilling: React.FC<any> = ({
                         value={calculateSubtotalAfterDiscount()}
                         className="w-100"
                         mode="currency"
-                        currency="DOP"
-                        locale="es-DO"
+                        currency="PEN"
+                        locale="es-PE"
                         readOnly
                         inputClassName="form-control bg-light"
                       />
@@ -1253,8 +1254,8 @@ export const SalesBilling: React.FC<any> = ({
                         value={calculateTotalTax()}
                         className="w-100"
                         mode="currency"
-                        currency="DOP"
-                        locale="es-DO"
+                        currency="PEN"
+                        locale="es-PE"
                         readOnly
                         inputClassName="form-control bg-light"
                       />
@@ -1268,8 +1269,8 @@ export const SalesBilling: React.FC<any> = ({
                         value={calculateTotalWithholdingTax()}
                         className="w-100"
                         mode="currency"
-                        currency="DOP"
-                        locale="es-DO"
+                        currency="PEN"
+                        locale="es-PE"
                         readOnly
                         inputClassName="form-control bg-light"
                       />
@@ -1283,8 +1284,8 @@ export const SalesBilling: React.FC<any> = ({
                         value={calculateTotal()}
                         className="w-100 font-weight-bold"
                         mode="currency"
-                        currency="DOP"
-                        locale="es-DO"
+                        currency="PEN"
+                        locale="es-PE"
                         readOnly
                         inputClassName="form-control bg-light fw-bold"
                       />
@@ -1632,8 +1633,8 @@ const PriceColumnBody = ({
         placeholder="RD$ 0.00"
         style={{ minWidth: "150px" }}
         mode="currency"
-        currency="DOP"
-        locale="es-DO"
+        currency="PEN"
+        locale="es-PE"
         min={0}
         onValueChange={(e: any) => {
           onChange(e.value);
@@ -1704,8 +1705,8 @@ const DiscountColumnBody = ({
         suffix={discountType === "percentage" ? "%" : ""}
         prefix={discountType === "fixed" ? "$ " : ""}
         mode={localDiscountType === "fixed" ? "currency" : "decimal"}
-        currency={localDiscountType === "fixed" ? "DOP" : undefined}
-        locale="es-DO"
+        currency={localDiscountType === "fixed" ? "PEN" : undefined}
+        locale="es-PE"
         min={0}
         max={discountType === "percentage" ? 100 : undefined}
         onValueChange={(e: any) => {

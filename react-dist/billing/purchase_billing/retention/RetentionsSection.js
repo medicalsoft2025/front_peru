@@ -103,7 +103,7 @@ export const RetentionsSection = ({
     className: "h5 mb-0"
   }, /*#__PURE__*/React.createElement("i", {
     className: "pi pi-percentage me-2 text-primary"
-  }), "Retenciones (DOP)"), /*#__PURE__*/React.createElement(Button, {
+  }), "Retenciones (PEN)"), /*#__PURE__*/React.createElement(Button, {
     type: "button",
     label: "Agregar retenci\xF3n",
     className: "p-button-primary",
@@ -122,8 +122,8 @@ export const RetentionsSection = ({
   }, /*#__PURE__*/React.createElement("strong", null, "Base para retenciones:"), " ", /*#__PURE__*/React.createElement(InputNumber, {
     value: calculateBaseAmount(),
     mode: "currency",
-    currency: "DOP",
-    locale: "es-DO",
+    currency: "PEN",
+    locale: "es-PE",
     readOnly: true,
     className: "ml-2"
   }), /*#__PURE__*/React.createElement("small", {
@@ -155,8 +155,8 @@ export const RetentionsSection = ({
   }, "Valor"), /*#__PURE__*/React.createElement(InputNumber, {
     value: retention.value || 0,
     mode: "currency",
-    currency: "DOP",
-    locale: "es-DO",
+    currency: "PEN",
+    locale: "es-PE",
     className: "w-100",
     readOnly: true
   })), /*#__PURE__*/React.createElement("div", {
@@ -177,8 +177,8 @@ export const RetentionsSection = ({
   }, "Total retenciones:"), /*#__PURE__*/React.createElement(InputNumber, {
     value: retentions.reduce((sum, r) => sum + (r.value || 0), 0),
     mode: "currency",
-    currency: "DOP",
-    locale: "es-DO",
+    currency: "PEN",
+    locale: "es-PE",
     className: "font-weight-bold",
     readOnly: true
   }))))));

@@ -209,16 +209,14 @@ export const DebitCreditNotes = () => {
         loadNotes(1, rows);
     };
 
-    const formatCurrency = (value: number) => {
-        return (
-            value?.toLocaleString("es-DO", {
-                style: "currency",
-                currency: "DOP",
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-            }) || "$0.00"
-        );
-    };
+const formatCurrency = (value: number) => {
+  return value.toLocaleString("es-PE", {
+    style: "currency",
+    currency: "PEN",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+};
 
     const getTipoNotaSeverity = (tipo: string) => {
         return tipo === "debit" ? "danger" : "success";

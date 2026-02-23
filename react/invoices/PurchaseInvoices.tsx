@@ -215,14 +215,14 @@ export const PurchaseInvoices = () => {
     };
 
     // Formatear número para montos en pesos dominicanos (DOP)
-    const formatCurrency = (value: number) => {
-        return value?.toLocaleString("es-DO", {
-            style: "currency",
-            currency: "DOP",
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        });
-    };
+const formatCurrency = (value: number) => {
+  return value.toLocaleString("es-PE", {
+    style: "currency",
+    currency: "PEN",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+};
 
     // Formatear fecha
     const formatDate = (value: Date) => {

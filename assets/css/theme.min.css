@@ -867,7 +867,7 @@ body {
     line-height: var(--phoenix-body-line-height);
     color: var(--phoenix-body-color);
     text-align: var(--phoenix-body-text-align);
-  background-color: #F5F7FA !important;
+    background-color: #F5F7FA !important;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
 }
@@ -1040,8 +1040,8 @@ sup {
 a {
     color: #1A99FB;
     text-decoration: none;
-     font-family: 'Inter', sans-serif !important;
-  font-size: medium !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: medium !important;
 }
 
 a:hover {
@@ -26950,9 +26950,9 @@ textarea.form-control.is-invalid {
     color: #fff
 }
 
-[id] {
+/* [id] {
     scroll-margin-top: calc(var(--phoenix-navbar-top-height) + var(--phoenix-scroll-margin-top))
-}
+} */
 
 body {
     -webkit-font-smoothing: antialiased;
