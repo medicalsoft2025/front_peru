@@ -48,6 +48,7 @@ import { AvailabilitySlotsDialog } from './components/AvailabilitySlotsDialog';
 import { SpecialtyAvailabilityForm } from './components/SpecialtyAvailabilityForm';
 import { AISchedulingForm } from './components/AISchedulingForm';
 import { AvailabilityData, SelectedSlot, AppointmentConfig } from './components/types';
+import { useQueryClient } from '@tanstack/react-query';
 
 export interface AppointmentFormInputs {
     uuid: string;
@@ -125,6 +126,8 @@ export const AppointmentFormModal = ({
     const [availabilityDialogVisible, setAvailabilityDialogVisible] = useState(false);
     const [foundAvailabilities, setFoundAvailabilities] = useState<AvailabilityData[]>([]);
     const [aiFilters, setAiFilters] = useState<any>(null);
+
+    const queryClient = useQueryClient();
 
     // Ref for preserving edit values during async fetches
     const pendingEditRef = useRef<{ doctorId?: string; date?: Date; time?: string; doctorObject?: any } | null>(null);
@@ -427,6 +430,10 @@ export const AppointmentFormModal = ({
             if (onAppointmentCreated) {
                 onAppointmentCreated();
             }
+
+            queryClient.invalidateQueries({
+                queryKey: ['appointments']
+            });
 
             setAppointments([]); // Clear appointments list
             clearAppointmentForm(); // Clear inputs

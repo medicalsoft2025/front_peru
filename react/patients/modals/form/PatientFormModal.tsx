@@ -159,20 +159,9 @@ const PatientFormModal: React.FC<PatientFormModalProps> = ({
             "patient.document_number",
             "patient.first_name",
             "patient.last_name",
-            "patient.gender",
-            "patient.date_of_birth",
-            "patient.whatsapp",
-            "patient.email",
-            "patient.blood_type",
         ],
-        1: [
-            "patient.country_id",
-            "patient.department_id",
-            "patient.city_id",
-            "patient.address",
-            "patient.nationality",
-        ],
-        2: ["social_security.entity_id", "social_security.affiliate_type"],
+        1: [],
+        2: [],
     };
 
     const toast = useRef<Toast>(null);
@@ -964,11 +953,10 @@ const PatientFormModal: React.FC<PatientFormModalProps> = ({
                                 <Controller
                                     name="patient.gender"
                                     control={control}
-                                    rules={{ required: "Género es requerido" }}
                                     render={({ field, fieldState }) => (
                                         <div>
                                             <label className="form-label">
-                                                Género *
+                                                Género
                                             </label>
                                             <Dropdown
                                                 options={genderOptions}
@@ -990,13 +978,10 @@ const PatientFormModal: React.FC<PatientFormModalProps> = ({
                                 <Controller
                                     name="patient.whatsapp"
                                     control={control}
-                                    rules={{
-                                        required: "WhatsApp es requerido",
-                                    }}
                                     render={({ field, fieldState }) => (
                                         <div>
                                             <label className="form-label">
-                                                WhatsApp *
+                                                WhatsApp
                                             </label>
                                             <InputText
                                                 className={classNames("w-100", {
@@ -1012,13 +997,10 @@ const PatientFormModal: React.FC<PatientFormModalProps> = ({
                                 <Controller
                                     name="patient.civil_status"
                                     control={control}
-                                    rules={{
-                                        required: "Estado civil es requerido",
-                                    }}
                                     render={({ field, fieldState }) => (
                                         <div>
                                             <label className="form-label">
-                                                Estado Civil *
+                                                Estado Civil
                                             </label>
                                             <Dropdown
                                                 options={civilStatusOptions}
@@ -1067,14 +1049,10 @@ const PatientFormModal: React.FC<PatientFormModalProps> = ({
                                 <Controller
                                     name="patient.date_of_birth"
                                     control={control}
-                                    rules={{
-                                        required:
-                                            "Fecha de nacimiento es requerida",
-                                    }}
                                     render={({ field, fieldState }) => (
                                         <div>
                                             <label className="form-label">
-                                                Fecha de nacimiento *
+                                                Fecha de nacimiento
                                             </label>
                                             <Calendar
                                                 className={classNames("w-100", {
@@ -1116,13 +1094,10 @@ const PatientFormModal: React.FC<PatientFormModalProps> = ({
                                 <Controller
                                     name="patient.blood_type"
                                     control={control}
-                                    rules={{
-                                        required: "Tipo de sangre es requerido",
-                                    }}
                                     render={({ field, fieldState }) => (
                                         <div>
                                             <label className="form-label">
-                                                Tipo de sangre *
+                                                Tipo de sangre
                                             </label>
                                             <Dropdown
                                                 options={bloodTypeOptions}
@@ -1293,11 +1268,10 @@ const PatientFormModal: React.FC<PatientFormModalProps> = ({
                                 <Controller
                                     name="patient.country_id"
                                     control={control}
-                                    rules={{ required: "País es requerido" }}
                                     render={({ field, fieldState }) => (
                                         <div className="mb-3">
                                             <label className="form-label">
-                                                País *
+                                                País
                                             </label>
                                             <Dropdown
                                                 appendTo="self"
@@ -1327,11 +1301,10 @@ const PatientFormModal: React.FC<PatientFormModalProps> = ({
                                 <Controller
                                     name="patient.city_id"
                                     control={control}
-                                    rules={{ required: "Ciudad es requerida" }}
                                     render={({ field, fieldState }) => (
                                         <div className="mb-3">
                                             <label className="form-label">
-                                                Ciudad *
+                                                Ciudad
                                             </label>
                                             <Dropdown
                                                 appendTo="self"
@@ -1375,13 +1348,10 @@ const PatientFormModal: React.FC<PatientFormModalProps> = ({
                                 <Controller
                                     name="patient.department_id"
                                     control={control}
-                                    rules={{
-                                        required: "Departamento es requerido",
-                                    }}
                                     render={({ field, fieldState }) => (
                                         <div className="mb-3">
                                             <label className="form-label">
-                                                Departamento o provincia *
+                                                Departamento o provincia
                                             </label>
                                             <Dropdown
                                                 appendTo="self"
@@ -1412,13 +1382,10 @@ const PatientFormModal: React.FC<PatientFormModalProps> = ({
                                 <Controller
                                     name="patient.nationality"
                                     control={control}
-                                    rules={{
-                                        required: "Nacionalidad es requerida",
-                                    }}
                                     render={({ field, fieldState }) => (
                                         <div className="mb-3">
                                             <label className="form-label">
-                                                Nacionalidad *
+                                                Nacionalidad
                                             </label>
                                             <Dropdown
                                                 appendTo="self"
@@ -1447,13 +1414,10 @@ const PatientFormModal: React.FC<PatientFormModalProps> = ({
                                 <Controller
                                     name="patient.address"
                                     control={control}
-                                    rules={{
-                                        required: "Dirección es requerida",
-                                    }}
                                     render={({ field, fieldState }) => (
                                         <div className="mb-3">
                                             <label className="form-label">
-                                                Dirección *
+                                                Dirección
                                             </label>
                                             <InputText
                                                 className={classNames("w-100", {
@@ -1592,13 +1556,10 @@ const PatientFormModal: React.FC<PatientFormModalProps> = ({
                                 <Controller
                                     name="social_security.entity_id"
                                     control={control}
-                                    rules={{
-                                        required: "Aseguradora es requerida",
-                                    }}
                                     render={({ field, fieldState }) => (
                                         <div className="mb-3">
                                             <label className="form-label">
-                                                Aseguradora *
+                                                Aseguradora
                                             </label>
                                             <Dropdown
                                                 appendTo="self"
@@ -1622,14 +1583,10 @@ const PatientFormModal: React.FC<PatientFormModalProps> = ({
                                 <Controller
                                     name="social_security.affiliate_type"
                                     control={control}
-                                    rules={{
-                                        required:
-                                            "ARS Y TIPO DE REGIMEN es requerida",
-                                    }}
                                     render={({ field, fieldState }) => (
                                         <div className="mb-3">
                                             <label className="form-label">
-                                                ARS Y TIPO DE REGIMEN *
+                                                ARS Y TIPO DE REGIMEN
                                             </label>
                                             <Dropdown
                                                 appendTo="self"
@@ -1673,17 +1630,11 @@ const PatientFormModal: React.FC<PatientFormModalProps> = ({
                         const basicValid = await trigger([
                             "patient.document_type",
                             "patient.document_number",
+                            "patient.first_name",
+                            "patient.last_name",
                         ]);
 
-                        const residenceValid = await trigger([
-                            "patient.country_id",
-                        ]);
-
-                        const securityValid = await trigger([
-                            "social_security.entity_id",
-                        ]);
-
-                        if (basicValid && residenceValid && securityValid) {
+                        if (basicValid) {
                             handleSubmit(onSubmit)();
                         } else {
                             toast.current?.show({

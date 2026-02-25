@@ -33,6 +33,7 @@ import { TabView, TabPanel } from 'primereact/tabview';
 import { AvailabilitySlotsDialog } from "./components/AvailabilitySlotsDialog.js";
 import { SpecialtyAvailabilityForm } from "./components/SpecialtyAvailabilityForm.js";
 import { AISchedulingForm } from "./components/AISchedulingForm.js";
+import { useQueryClient } from '@tanstack/react-query';
 export const AppointmentFormModal = ({
   isOpen,
   onClose,
@@ -65,6 +66,7 @@ export const AppointmentFormModal = ({
   const [availabilityDialogVisible, setAvailabilityDialogVisible] = useState(false);
   const [foundAvailabilities, setFoundAvailabilities] = useState([]);
   const [aiFilters, setAiFilters] = useState(null);
+  const queryClient = useQueryClient();
 
   // Ref for preserving edit values during async fetches
   const pendingEditRef = useRef(null);
@@ -354,6 +356,9 @@ export const AppointmentFormModal = ({
       if (onAppointmentCreated) {
         onAppointmentCreated();
       }
+      queryClient.invalidateQueries({
+        queryKey: ['appointments']
+      });
       setAppointments([]); // Clear appointments list
       clearAppointmentForm(); // Clear inputs
       clearPatientForm(); // Clear patient inputs

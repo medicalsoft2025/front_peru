@@ -6,7 +6,7 @@ import { useMakeRequest } from "../general-request/hooks/useMakeRequest.js";
 import { CustomFormModal } from "../components/CustomFormModal.js";
 import { MakeRequestForm } from "../general-request/components/MakeRequestForm.js";
 import { SwalManager } from "../../services/alertManagerImported.js";
-import { useDataPagination } from "../hooks/useDataPagination.js";
+import { usePaginatedAdmissions } from "./hooks/usePaginatedAdmissions.js";
 export const AdmissionApp = () => {
   const {
     admissions,
@@ -23,21 +23,6 @@ export const AdmissionApp = () => {
   function getCustomFilters() {
     return filters;
   }
-  const fetchAdmissionsForPagination = async params => {
-    const result = await fetchAdmissions({
-      ...params,
-      ...filters,
-      sort: "-createdAt"
-    });
-    console.log("result", result);
-
-    // Retornar en el formato que espera useDataPagination
-    return {
-      data: result.data,
-      // Los datos ya mapeados por useAdmissions
-      total: result.total
-    };
-  };
   const {
     data: admissionData,
     loading: loadingPaginator,
@@ -47,10 +32,8 @@ export const AdmissionApp = () => {
     handlePageChange,
     handleSearchChange,
     refresh
-  } = useDataPagination({
-    fetchFunction: fetchAdmissionsForPagination,
-    defaultPerPage: 10,
-    getCustomFilters: getCustomFilters
+  } = usePaginatedAdmissions({
+    filters: getCustomFilters()
   });
   const requestCancellation = id => {
     setSelectedItemId(id);
@@ -88,9 +71,10 @@ export const AdmissionApp = () => {
       patientId: filters.selectedPatient,
       entityId: filters.selectedEntity,
       createdAt: dateFilter,
-      productId: filters.selectedProduct
+      productId: filters.selectedProduct,
+      companyId: filters.companyId
     };
-    refresh(newFilters);
+    setFilters(newFilters);
   };
   const handleRefresh = () => {
     refresh();

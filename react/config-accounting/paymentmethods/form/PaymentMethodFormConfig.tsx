@@ -11,6 +11,8 @@ import {
   PaymentMethodFormProps,
 } from "../interfaces/PaymentMethodFormConfigTypes";
 import { Checkbox } from "primereact/checkbox";
+import { usePaymentSunat } from "../hooks/usePaymentSunat";
+
 
 const categories = [
   { label: "Transaccional", value: "transactional" },
@@ -43,6 +45,7 @@ const PaymentMethodFormConfig: React.FC<PaymentMethodFormProps> = ({
   loading = false,
 }) => {
   const { accounts, isLoading: isLoadingAccounts } = useAccountingAccounts();
+  const { paymentMethods, loading: loadingSunat } = usePaymentSunat();
 
   const {
     control,
@@ -104,11 +107,22 @@ const PaymentMethodFormConfig: React.FC<PaymentMethodFormProps> = ({
               }}
               render={({ field, fieldState }) => (
                 <>
-                  <InputText
+                  <Dropdown
                     id={field.name}
-                    {...field}
-                    className={classNames({ "p-invalid": fieldState.error })}
-                    placeholder="Ingrese el nombre del método de pago"
+                    value={field.value}
+                    onChange={(e) => field.onChange(e.value)}
+                    options={
+                      Array.isArray(paymentMethods)
+                        ? paymentMethods.map((pm: any) => ({
+                            label: `${pm.codigo} - ${pm.descripcion}`,
+                            value: `${pm.codigo} - ${pm.descripcion}`,
+                          }))
+                        : []
+                    }
+                    className={classNames("w-full", { "p-invalid": fieldState.error })}
+                    placeholder="Seleccione el método de pago"
+                    filter
+                    showClear
                   />
                   {getFormErrorMessage("name")}
                 </>

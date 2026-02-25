@@ -20,6 +20,7 @@ import { exportToExcel } from "../accounting/utils/ExportToExcelOptions.js";
 import { useUsers } from "../users/hooks/useUsers.js";
 import { useEntities } from "../entities/hooks/useEntities.js";
 import { clinicalRecordStateColors, clinicalRecordStates } from "../../services/commons.js";
+import { useCompanies } from "../companies/hooks/useCompanies.js";
 export const AdmissionTable = ({
   items,
   onReload,
@@ -45,6 +46,7 @@ export const AdmissionTable = ({
   const [selectedEntity, setSelectedEntity] = useState(null);
   const [selectedDate, setSelectedDate] = React.useState(null);
   const [selectedAdmissionId, setSelectedAdmissionId] = useState("");
+  const [companyId, setCompanyId] = useState(null);
   const [patients, setPatients] = useState([]);
   const [showUpdateAuthorizationModal, setShowUpdateAuthorizationModal] = useState(false);
   const [showUploadAndVisualizeResultsModal, setShowUploadAndVisualizeResultsModal] = useState(false);
@@ -53,6 +55,9 @@ export const AdmissionTable = ({
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
   const [admissionToDelete, setAdmissionToDelete] = useState(null);
+  const {
+    companies
+  } = useCompanies();
   const toast = useRef(null);
   const tableItems = useMemo(() => {
     return items.map(item => {
@@ -70,7 +75,8 @@ export const AdmissionTable = ({
         status: item.status,
         invoiceCode: item.invoiceCode,
         invoiceId: item.invoiceId,
-        products: item.products
+        products: item.products,
+        companyName: item.companyName
       };
     });
   }, [items]);
@@ -80,7 +86,8 @@ export const AdmissionTable = ({
       selectedPatient: selectedPatient?.id?.toString() || null,
       selectedEntity,
       selectedDate,
-      selectedProduct
+      selectedProduct,
+      companyId
     };
     handleFilter && handleFilter(filterValues);
   };
@@ -92,7 +99,7 @@ export const AdmissionTable = ({
       onFilter();
     }, 500);
     return () => clearTimeout(timeoutId);
-  }, [selectedAdmittedBy, selectedPatient, selectedEntity, selectedDate, selectedProduct]);
+  }, [selectedAdmittedBy, selectedPatient, selectedEntity, selectedDate, selectedProduct, companyId]);
   async function fetchProducts() {
     try {
       const response = await inventoryService.getAll();
@@ -236,6 +243,10 @@ export const AdmissionTable = ({
   }, {
     header: "Paciente",
     field: "patientName",
+    sortable: true
+  }, {
+    header: "Empresa",
+    field: "companyName",
     sortable: true
   }, {
     header: "Número de identificación",
@@ -525,7 +536,7 @@ export const AdmissionTable = ({
     },
     showClear: true
   })), /*#__PURE__*/React.createElement("div", {
-    className: "col-12"
+    className: "col-6"
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "procedure",
     className: "form-label"
@@ -542,6 +553,24 @@ export const AdmissionTable = ({
       setSelectedProduct(e.value);
     },
     showClear: true
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "col-6"
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "company",
+    className: "form-label"
+  }, "Empresa"), /*#__PURE__*/React.createElement(Dropdown, {
+    id: "company",
+    value: companyId,
+    options: companies,
+    onChange: e => {
+      setCompanyId(e.value);
+    },
+    optionLabel: "attributes.legal_name",
+    optionValue: "id",
+    placeholder: "Seleccione una empresa",
+    filter: true,
+    showClear: true,
+    className: "w-100 md:w-14rem"
   }))))))), /*#__PURE__*/React.createElement(CustomPRTable, {
     columns: columns,
     data: tableItems,

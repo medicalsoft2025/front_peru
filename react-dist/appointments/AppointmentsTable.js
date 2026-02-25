@@ -20,12 +20,16 @@ import { Toast } from "primereact/toast";
 import { Menu } from "primereact/menu";
 import { Button } from "primereact/button";
 import { AppointmentCreateFormModalButton } from "./AppointmentCreateFormModalButton.js";
+import { useCompanies } from "../companies/hooks/useCompanies.js";
 export const AppointmentsTable = () => {
   const patientId = new URLSearchParams(window.location.search).get("patient_id") || null;
   const [selectedBranch, setSelectedBranch] = React.useState(null);
   const [selectedDate, setSelectedDate] = React.useState([new Date(new Date().setDate(new Date().getDate())), new Date()]);
   const [selectedAppointmentType, setSelectedAppointmentType] = React.useState(null);
   const userLogged = getUserLogged();
+  const {
+    companies
+  } = useCompanies();
   const appointmentTypes = [{
     value: null,
     label: "Todos los tipos",
@@ -73,7 +77,9 @@ export const AppointmentsTable = () => {
     totalRecords,
     first,
     loading: loadingAppointments,
-    perPage
+    perPage,
+    companyId,
+    setCompanyId
   } = useFetchAppointments(getCustomFilters);
   const [showRescheduleModal, setShowRescheduleModal] = useState(false);
   const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
@@ -339,6 +345,9 @@ export const AppointmentsTable = () => {
     field: "patientDNI",
     sortable: true
   }, {
+    field: "companyName",
+    header: "Empresa"
+  }, {
     header: "Fecha Consulta",
     field: "date",
     sortable: true
@@ -511,7 +520,7 @@ export const AppointmentsTable = () => {
   }, /*#__PURE__*/React.createElement("div", {
     className: "row mb-3"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "col-md-4"
+    className: "col-md-3"
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "branch_id",
     className: "form-label"
@@ -527,7 +536,7 @@ export const AppointmentsTable = () => {
     onChange: e => setSelectedBranch(e.value),
     showClear: true
   })), /*#__PURE__*/React.createElement("div", {
-    className: "col-md-4"
+    className: "col-md-3"
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "appointment_type",
     className: "form-label"
@@ -543,7 +552,7 @@ export const AppointmentsTable = () => {
     onChange: e => setSelectedAppointmentType(e.value),
     showClear: true
   })), /*#__PURE__*/React.createElement("div", {
-    className: "col-md-4"
+    className: "col-md-3"
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "rangoFechasCitas",
     className: "form-label"
@@ -556,6 +565,24 @@ export const AppointmentsTable = () => {
     onChange: e => setSelectedDate(e.value),
     className: "w-100",
     placeholder: "Seleccione un rango"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "col-md-3"
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "company",
+    className: "form-label"
+  }, "Empresa"), /*#__PURE__*/React.createElement(Dropdown, {
+    id: "company",
+    value: companyId,
+    options: companies,
+    onChange: e => {
+      setCompanyId(e.value);
+    },
+    optionLabel: "attributes.legal_name",
+    optionValue: "id",
+    placeholder: "Seleccione una empresa",
+    filter: true,
+    showClear: true,
+    className: "w-100 md:w-14rem"
   }))))), /*#__PURE__*/React.createElement(CustomPRTable, {
     columns: columns,
     data: appointments,

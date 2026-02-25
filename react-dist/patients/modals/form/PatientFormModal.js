@@ -189,9 +189,9 @@ const PatientFormModal = ({
     value: "privado"
   }];
   const stepValidations = {
-    0: ["patient.document_type", "patient.document_number", "patient.first_name", "patient.last_name", "patient.gender", "patient.date_of_birth", "patient.whatsapp", "patient.email", "patient.blood_type"],
-    1: ["patient.country_id", "patient.department_id", "patient.city_id", "patient.address", "patient.nationality"],
-    2: ["social_security.entity_id", "social_security.affiliate_type"]
+    0: ["patient.document_type", "patient.document_number", "patient.first_name", "patient.last_name"],
+    1: [],
+    2: []
   };
   const toast = useRef(null);
   useEffect(() => {
@@ -804,15 +804,12 @@ const PatientFormModal = ({
   }, /*#__PURE__*/React.createElement(Controller, {
     name: "patient.gender",
     control: control,
-    rules: {
-      required: "Género es requerido"
-    },
     render: ({
       field,
       fieldState
     }) => /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
       className: "form-label"
-    }, "G\xE9nero *"), /*#__PURE__*/React.createElement(Dropdown, {
+    }, "G\xE9nero"), /*#__PURE__*/React.createElement(Dropdown, {
       options: genderOptions,
       placeholder: "Seleccione",
       className: classNames("w-100", {
@@ -825,15 +822,12 @@ const PatientFormModal = ({
   }), /*#__PURE__*/React.createElement(Controller, {
     name: "patient.whatsapp",
     control: control,
-    rules: {
-      required: "WhatsApp es requerido"
-    },
     render: ({
       field,
       fieldState
     }) => /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
       className: "form-label"
-    }, "WhatsApp *"), /*#__PURE__*/React.createElement(InputText, _extends({
+    }, "WhatsApp"), /*#__PURE__*/React.createElement(InputText, _extends({
       className: classNames("w-100", {
         "is-invalid": fieldState.error
       })
@@ -841,15 +835,12 @@ const PatientFormModal = ({
   }), /*#__PURE__*/React.createElement(Controller, {
     name: "patient.civil_status",
     control: control,
-    rules: {
-      required: "Estado civil es requerido"
-    },
     render: ({
       field,
       fieldState
     }) => /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
       className: "form-label"
-    }, "Estado Civil *"), /*#__PURE__*/React.createElement(Dropdown, {
+    }, "Estado Civil"), /*#__PURE__*/React.createElement(Dropdown, {
       options: civilStatusOptions,
       placeholder: "Seleccione",
       className: classNames("w-100 h-20", {
@@ -880,15 +871,12 @@ const PatientFormModal = ({
   }, /*#__PURE__*/React.createElement(Controller, {
     name: "patient.date_of_birth",
     control: control,
-    rules: {
-      required: "Fecha de nacimiento es requerida"
-    },
     render: ({
       field,
       fieldState
     }) => /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
       className: "form-label"
-    }, "Fecha de nacimiento *"), /*#__PURE__*/React.createElement(Calendar, {
+    }, "Fecha de nacimiento"), /*#__PURE__*/React.createElement(Calendar, {
       className: classNames("w-100", {
         "is-invalid": fieldState.error
       }),
@@ -917,15 +905,12 @@ const PatientFormModal = ({
   }), /*#__PURE__*/React.createElement(Controller, {
     name: "patient.blood_type",
     control: control,
-    rules: {
-      required: "Tipo de sangre es requerido"
-    },
     render: ({
       field,
       fieldState
     }) => /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
       className: "form-label"
-    }, "Tipo de sangre *"), /*#__PURE__*/React.createElement(Dropdown, {
+    }, "Tipo de sangre"), /*#__PURE__*/React.createElement(Dropdown, {
       options: bloodTypeOptions,
       placeholder: "Seleccione",
       className: classNames("w-100", {
@@ -1054,9 +1039,6 @@ const PatientFormModal = ({
   }, /*#__PURE__*/React.createElement(Controller, {
     name: "patient.country_id",
     control: control,
-    rules: {
-      required: "País es requerido"
-    },
     render: ({
       field,
       fieldState
@@ -1064,7 +1046,7 @@ const PatientFormModal = ({
       className: "mb-3"
     }, /*#__PURE__*/React.createElement("label", {
       className: "form-label"
-    }, "Pa\xEDs *"), /*#__PURE__*/React.createElement(Dropdown, {
+    }, "Pa\xEDs"), /*#__PURE__*/React.createElement(Dropdown, {
       appendTo: "self",
       options: countries,
       placeholder: "Seleccione",
@@ -1085,9 +1067,6 @@ const PatientFormModal = ({
   }), /*#__PURE__*/React.createElement(Controller, {
     name: "patient.city_id",
     control: control,
-    rules: {
-      required: "Ciudad es requerida"
-    },
     render: ({
       field,
       fieldState
@@ -1095,7 +1074,7 @@ const PatientFormModal = ({
       className: "mb-3"
     }, /*#__PURE__*/React.createElement("label", {
       className: "form-label"
-    }, "Ciudad *"), /*#__PURE__*/React.createElement(Dropdown, {
+    }, "Ciudad"), /*#__PURE__*/React.createElement(Dropdown, {
       appendTo: "self",
       options: cities,
       placeholder: cities.length === 0 ? "Seleccione un departamento primero" : "Seleccione",
@@ -1118,9 +1097,6 @@ const PatientFormModal = ({
   }, /*#__PURE__*/React.createElement(Controller, {
     name: "patient.department_id",
     control: control,
-    rules: {
-      required: "Departamento es requerido"
-    },
     render: ({
       field,
       fieldState
@@ -1128,7 +1104,7 @@ const PatientFormModal = ({
       className: "mb-3"
     }, /*#__PURE__*/React.createElement("label", {
       className: "form-label"
-    }, "Departamento o provincia *"), /*#__PURE__*/React.createElement(Dropdown, {
+    }, "Departamento o provincia"), /*#__PURE__*/React.createElement(Dropdown, {
       appendTo: "self",
       options: departments,
       placeholder: "Seleccione",
@@ -1150,9 +1126,6 @@ const PatientFormModal = ({
   }), /*#__PURE__*/React.createElement(Controller, {
     name: "patient.nationality",
     control: control,
-    rules: {
-      required: "Nacionalidad es requerida"
-    },
     render: ({
       field,
       fieldState
@@ -1160,7 +1133,7 @@ const PatientFormModal = ({
       className: "mb-3"
     }, /*#__PURE__*/React.createElement("label", {
       className: "form-label"
-    }, "Nacionalidad *"), /*#__PURE__*/React.createElement(Dropdown, {
+    }, "Nacionalidad"), /*#__PURE__*/React.createElement(Dropdown, {
       appendTo: "self",
       options: countries,
       placeholder: "Seleccione",
@@ -1180,9 +1153,6 @@ const PatientFormModal = ({
   }, /*#__PURE__*/React.createElement(Controller, {
     name: "patient.address",
     control: control,
-    rules: {
-      required: "Dirección es requerida"
-    },
     render: ({
       field,
       fieldState
@@ -1190,7 +1160,7 @@ const PatientFormModal = ({
       className: "mb-3"
     }, /*#__PURE__*/React.createElement("label", {
       className: "form-label"
-    }, "Direcci\xF3n *"), /*#__PURE__*/React.createElement(InputText, _extends({
+    }, "Direcci\xF3n"), /*#__PURE__*/React.createElement(InputText, _extends({
       className: classNames("w-100", {
         "is-invalid": fieldState.error
       })
@@ -1303,9 +1273,6 @@ const PatientFormModal = ({
   }, /*#__PURE__*/React.createElement(Controller, {
     name: "social_security.entity_id",
     control: control,
-    rules: {
-      required: "Aseguradora es requerida"
-    },
     render: ({
       field,
       fieldState
@@ -1313,7 +1280,7 @@ const PatientFormModal = ({
       className: "mb-3"
     }, /*#__PURE__*/React.createElement("label", {
       className: "form-label"
-    }, "Aseguradora *"), /*#__PURE__*/React.createElement(Dropdown, {
+    }, "Aseguradora"), /*#__PURE__*/React.createElement(Dropdown, {
       appendTo: "self",
       options: entities,
       placeholder: "Seleccione",
@@ -1328,9 +1295,6 @@ const PatientFormModal = ({
   }, /*#__PURE__*/React.createElement(Controller, {
     name: "social_security.affiliate_type",
     control: control,
-    rules: {
-      required: "ARS Y TIPO DE REGIMEN es requerida"
-    },
     render: ({
       field,
       fieldState
@@ -1338,7 +1302,7 @@ const PatientFormModal = ({
       className: "mb-3"
     }, /*#__PURE__*/React.createElement("label", {
       className: "form-label"
-    }, "ARS Y TIPO DE REGIMEN *"), /*#__PURE__*/React.createElement(Dropdown, {
+    }, "ARS Y TIPO DE REGIMEN"), /*#__PURE__*/React.createElement(Dropdown, {
       appendTo: "self",
       options: regimeOptions,
       placeholder: "Seleccione",
@@ -1368,10 +1332,8 @@ const PatientFormModal = ({
     className: "btn btn-primary btn-sm",
     onClick: async e => {
       e.preventDefault();
-      const basicValid = await trigger(["patient.document_type", "patient.document_number"]);
-      const residenceValid = await trigger(["patient.country_id"]);
-      const securityValid = await trigger(["social_security.entity_id"]);
-      if (basicValid && residenceValid && securityValid) {
+      const basicValid = await trigger(["patient.document_type", "patient.document_number", "patient.first_name", "patient.last_name"]);
+      if (basicValid) {
         handleSubmit(onSubmit)();
       } else {
         toast.current?.show({

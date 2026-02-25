@@ -10,6 +10,8 @@ import {
 } from "../general-request/components/MakeRequestForm";
 import { SwalManager } from "../../services/alertManagerImported";
 import { useDataPagination } from "../hooks/useDataPagination";
+import { usePaginatedAdmissions } from "./hooks/usePaginatedAdmissions";
+import { set } from "react-hook-form";
 
 export const AdmissionApp: React.FC = () => {
     const { admissions, fetchAdmissions, loading, totalRecords } =
@@ -25,22 +27,6 @@ export const AdmissionApp: React.FC = () => {
         return filters;
     }
 
-    const fetchAdmissionsForPagination = async (params: any) => {
-        const result = await fetchAdmissions({
-            ...params,
-            ...filters,
-            sort: "-createdAt",
-        });
-
-        console.log("result", result);
-
-        // Retornar en el formato que espera useDataPagination
-        return {
-            data: result.data, // Los datos ya mapeados por useAdmissions
-            total: result.total,
-        };
-    };
-
     const {
         data: admissionData,
         loading: loadingPaginator,
@@ -50,10 +36,8 @@ export const AdmissionApp: React.FC = () => {
         handlePageChange,
         handleSearchChange,
         refresh,
-    } = useDataPagination({
-        fetchFunction: fetchAdmissionsForPagination,
-        defaultPerPage: 10,
-        getCustomFilters: getCustomFilters,
+    } = usePaginatedAdmissions({
+        filters: getCustomFilters(),
     });
 
     const requestCancellation = (id: string) => {
@@ -103,8 +87,9 @@ export const AdmissionApp: React.FC = () => {
             entityId: filters.selectedEntity,
             createdAt: dateFilter,
             productId: filters.selectedProduct,
+            companyId: filters.companyId
         };
-        refresh(newFilters);
+        setFilters(newFilters);
     };
 
     const handleRefresh = () => {

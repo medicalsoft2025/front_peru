@@ -2,12 +2,12 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
 import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { classNames } from "primereact/utils";
-import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Dropdown } from "primereact/dropdown";
 import { useAccountingAccounts } from "../../../accounting/hooks/useAccountingAccounts.js";
 import { Checkbox } from "primereact/checkbox";
+import { usePaymentSunat } from "../hooks/usePaymentSunat.js";
 const categories = [{
   label: "Transaccional",
   value: "transactional"
@@ -63,6 +63,10 @@ const PaymentMethodFormConfig = ({
     accounts,
     isLoading: isLoadingAccounts
   } = useAccountingAccounts();
+  const {
+    paymentMethods,
+    loading: loadingSunat
+  } = usePaymentSunat();
   const {
     control,
     handleSubmit,
@@ -123,14 +127,21 @@ const PaymentMethodFormConfig = ({
     render: ({
       field,
       fieldState
-    }) => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(InputText, _extends({
-      id: field.name
-    }, field, {
-      className: classNames({
+    }) => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Dropdown, {
+      id: field.name,
+      value: field.value,
+      onChange: e => field.onChange(e.value),
+      options: Array.isArray(paymentMethods) ? paymentMethods.map(pm => ({
+        label: `${pm.codigo} - ${pm.descripcion}`,
+        value: `${pm.codigo} - ${pm.descripcion}`
+      })) : [],
+      className: classNames("w-full", {
         "p-invalid": fieldState.error
       }),
-      placeholder: "Ingrese el nombre del m\xE9todo de pago"
-    })), getFormErrorMessage("name"))
+      placeholder: "Seleccione el m\xE9todo de pago",
+      filter: true,
+      showClear: true
+    }), getFormErrorMessage("name"))
   })), /*#__PURE__*/React.createElement("div", {
     className: "field mb-4"
   }, /*#__PURE__*/React.createElement("label", {

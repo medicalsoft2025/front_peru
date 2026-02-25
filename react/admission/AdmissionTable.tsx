@@ -41,6 +41,7 @@ import {
     clinicalRecordStateColors,
     clinicalRecordStates,
 } from "../../services/commons";
+import { useCompanies } from "../companies/hooks/useCompanies";
 
 export interface AdmissionTableFilters {
     selectedDate: Nullable<(Date | null)[]>;
@@ -48,6 +49,7 @@ export interface AdmissionTableFilters {
     selectedProduct: string | null;
     selectedPatient: string | null;
     selectedAdmittedBy: string | null;
+    companyId: string | null;
 }
 
 interface AdmissionTableProps {
@@ -108,6 +110,7 @@ export const AdmissionTable: React.FC<AdmissionTableProps> = ({
     const [selectedDate, setSelectedDate] =
         React.useState<Nullable<(Date | null)[]>>(null);
     const [selectedAdmissionId, setSelectedAdmissionId] = useState<string>("");
+    const [companyId, setCompanyId] = useState<string | null>(null);
     const [patients, setPatients] = useState<Patient[]>([]);
 
     const [showUpdateAuthorizationModal, setShowUpdateAuthorizationModal] =
@@ -123,6 +126,8 @@ export const AdmissionTable: React.FC<AdmissionTableProps> = ({
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
     const [admissionToDelete, setAdmissionToDelete] =
         useState<AdmissionTableItem | null>(null);
+
+    const { companies } = useCompanies();
 
     const toast = useRef<Toast>(null);
 
@@ -143,6 +148,7 @@ export const AdmissionTable: React.FC<AdmissionTableProps> = ({
                 invoiceCode: item.invoiceCode,
                 invoiceId: item.invoiceId,
                 products: item.products,
+                companyName: item.companyName,
             };
         });
     }, [items]);
@@ -154,6 +160,7 @@ export const AdmissionTable: React.FC<AdmissionTableProps> = ({
             selectedEntity,
             selectedDate,
             selectedProduct,
+            companyId,
         };
         handleFilter && handleFilter(filterValues);
     };
@@ -174,6 +181,7 @@ export const AdmissionTable: React.FC<AdmissionTableProps> = ({
         selectedEntity,
         selectedDate,
         selectedProduct,
+        companyId
     ]);
 
     async function fetchProducts() {
@@ -254,37 +262,37 @@ export const AdmissionTable: React.FC<AdmissionTableProps> = ({
             },
             ...(!rowData.originalItem.document_minio_id
                 ? [
-                      {
-                          label: "Adjuntar documento",
-                          icon: <i className="fa-solid fa-file-pdf me-2"></i>,
-                          command: handleAttachDocument,
-                      },
-                  ]
+                    {
+                        label: "Adjuntar documento",
+                        icon: <i className="fa-solid fa-file-pdf me-2"></i>,
+                        command: handleAttachDocument,
+                    },
+                ]
                 : []),
             ...(rowData.originalItem.document_minio_id
                 ? [
-                      {
-                          label: "Ver documento adjunto",
-                          icon: <i className="fa-solid fa-file-pdf me-2"></i>,
-                          command: handleViewDocument,
-                      },
-                  ]
+                    {
+                        label: "Ver documento adjunto",
+                        icon: <i className="fa-solid fa-file-pdf me-2"></i>,
+                        command: handleViewDocument,
+                    },
+                ]
                 : []),
             ...(rowData.koneksiClaimId
                 ? [
-                      {
-                          label: "Cargar y visualizar resultados de examenes",
-                          icon: (
-                              <i className="fa-solid fa-file-medical me-2"></i>
-                          ),
-                          command: handleUploadResults,
-                      },
-                      {
-                          label: "Anular reclamación",
-                          icon: <i className="fa-solid fa-ban me-2"></i>,
-                          command: handleCancelClaim,
-                      },
-                  ]
+                    {
+                        label: "Cargar y visualizar resultados de examenes",
+                        icon: (
+                            <i className="fa-solid fa-file-medical me-2"></i>
+                        ),
+                        command: handleUploadResults,
+                    },
+                    {
+                        label: "Anular reclamación",
+                        icon: <i className="fa-solid fa-ban me-2"></i>,
+                        command: handleCancelClaim,
+                    },
+                ]
                 : []),
             {
                 label: "Solicitar cancelación",
@@ -337,6 +345,7 @@ export const AdmissionTable: React.FC<AdmissionTableProps> = ({
         { header: "Admisionado el", field: "createdAt", sortable: true },
         { header: "Admisionado por", field: "admittedBy", sortable: true },
         { header: "Paciente", field: "patientName", sortable: true },
+        { header: "Empresa", field: "companyName", sortable: true },
         {
             header: "Número de identificación",
             field: "patientDNI",
@@ -673,7 +682,7 @@ export const AdmissionTable: React.FC<AdmissionTableProps> = ({
                                                 showClear
                                             />
                                         </div>
-                                        <div className="col-12">
+                                        <div className="col-6">
                                             <label
                                                 htmlFor="procedure"
                                                 className="form-label"
@@ -693,6 +702,23 @@ export const AdmissionTable: React.FC<AdmissionTableProps> = ({
                                                     setSelectedProduct(e.value);
                                                 }}
                                                 showClear
+                                            />
+                                        </div>
+                                        <div className="col-6">
+                                            <label htmlFor="company" className="form-label">Empresa</label>
+                                            <Dropdown
+                                                id="company"
+                                                value={companyId}
+                                                options={companies}
+                                                onChange={(e) => {
+                                                    setCompanyId(e.value);
+                                                }}
+                                                optionLabel="attributes.legal_name"
+                                                optionValue="id"
+                                                placeholder="Seleccione una empresa"
+                                                filter
+                                                showClear
+                                                className="w-100 md:w-14rem"
                                             />
                                         </div>
                                         {/* <div className="col-12">
