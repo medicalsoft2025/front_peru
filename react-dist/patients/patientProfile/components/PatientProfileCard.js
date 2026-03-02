@@ -6,7 +6,6 @@ import MedicalSection from "./MedicalSection.js";
 import ContactSection from "./ContactSection.js";
 import PatientProfileSkeleton from "../components/skeleton/PatientProfileSkeleton.js";
 import MedicalHistoryModal from "./MedicalHistoryModal.js";
-import PatientNotesImportant from "./PatientNotesImportant.js";
 export const PatientProfileCard = () => {
   const patientId = new URLSearchParams(window.location.search).get("id") || new URLSearchParams(window.location.search).get("patient_id");
   const {
@@ -48,10 +47,6 @@ export const PatientProfileCard = () => {
   })), /*#__PURE__*/React.createElement("div", {
     className: "col-lg-6 col-md-6"
   }, /*#__PURE__*/React.createElement(ContactSection, {
-    patient: patientData
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "col-lg-12 col-md-12"
-  }, /*#__PURE__*/React.createElement(PatientNotesImportant, {
     patient: patientData
   }))))), /*#__PURE__*/React.createElement(MedicalHistoryModal, {
     visible: showMedicalModal,

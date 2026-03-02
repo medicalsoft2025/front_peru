@@ -332,6 +332,7 @@ $_SESSION["ID"] = 1;
       "primereact/treenode": "https://esm.sh/primereact/treenode?dev",
       "primereact/colorpicker": "https://esm.sh/primereact/colorpicker?dev",
       "primereact/galleria": "https://esm.sh/primereact/galleria?dev",
+      "primereact/image": "https://esm.sh/primereact/image?dev",
       "primereact/skeleton": "https://esm.sh/primereact/skeleton?dev",
       "primereact/iconfield": "https://esm.sh/primereact/iconfield?dev",
       "primereact/inputicon": "https://esm.sh/primereact/inputicon?dev",

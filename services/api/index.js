@@ -85,6 +85,7 @@ import { BoletasService} from "./FE/boletasServices.js";
 import { NotasCreditoSunatService } from "./FE/NotasCreditoSunatService.js";
 import { NotasDebitoSunatService } from "./FE/NotasDebitoSunatService.js";
 import { PaymentMethodServiceSunat } from "./FE/PaymentMethodServiceSunat.js";
+import { PatientDocumentsService } from "./classes/patientDocumentsService.js";
 
 
 import BranchService from "./classes/branchService.js";
@@ -392,3 +393,4 @@ export const boletasService = new BoletasService("sunat/v1");
 export const notasCreditoSunatService = new NotasCreditoSunatService("sunat/v1");
 export const notasDebitoSunatService = new NotasDebitoSunatService("sunat/v1");
 export const paymentMethodServiceSunat = new PaymentMethodServiceSunat("sunat/v1");
+export const patientDocumentsService = new PatientDocumentsService("medical", "patient-documents");

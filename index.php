@@ -426,6 +426,7 @@ html, body {
       "primereact/avatar" : "https://esm.sh/primereact/avatar?dev",
       "primereact/inputotp" : "https://esm.sh/primereact/inputotp?dev",
       "primereact/galleria" : "https://esm.sh/primereact/galleria?dev",
+      "primereact/image" : "https://esm.sh/primereact/image?dev",
       "jspdf": "https://esm.sh/jspdf?dev",
       "jspdf-autotable": "https://esm.sh/jspdf-autotable?dev",
       "react-dom/server": "https://esm.sh/react-dom/server?dev"
@@ -533,9 +534,20 @@ html, body {
             }
         });
     </script>
-   <script 
-   
-   type="module" src="/front_peru/react-dist/login/boostrap.js"></script>
+    <script type="module">
+      import React from "react";
+      import ReactDOMClient from "react-dom/client";
+      import {
+        LoginApp
+      } from './react-dist/login/LoginApp.js';
+
+      const appointmentFormModalRef = React.createRef();
+
+      document.addEventListener('DOMContentLoaded', function() {
+        const rootElement = document.getElementById('LoginApp');
+        ReactDOMClient.createRoot(rootElement).render(React.createElement(LoginApp));
+      });
+    </script>
   </main>
 </body>
 

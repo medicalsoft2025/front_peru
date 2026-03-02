@@ -50,9 +50,9 @@ export const PatientProfileCard = () => {
                         <div className="col-lg-6 col-md-6">
                             <ContactSection patient={patientData} />
                         </div>
-                        <div className="col-lg-12 col-md-12">
+                        {/* <div className="col-lg-12 col-md-12">
                             <PatientNotesImportant patient={patientData} />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

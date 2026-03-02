@@ -88,9 +88,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                   if (!$numero_autorizacion) {
                                   $detalles_ticket_html .= "
                                   Precio Unitario: $" . number_format($detalle['precio_unitario'], 2) . "<br>
-                                  Subtotal: $" . number_format($detalle['subtotal'], 2) . "<br>
-                                  Descuento: $" . number_format($detalle['descuento'], 2) . "<br>
-                                  Total: $" . number_format($detalle['total'], 2) . "<br>
+                                  Subtotal: $" . number_format($detalle['precio_unitario'] * $detalle['cantidad'], 2) . "<br>
+                                  Descuento: -$" . number_format($detalle['descuento'], 2) . "<br>
+                                  Total: $" . number_format($detalle['total'] - $detalle['descuento'], 2) . "<br>
                                 </li><hr>";
                                   }
   }

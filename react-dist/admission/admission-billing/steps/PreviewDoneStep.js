@@ -43,7 +43,7 @@ const PreviewDoneStep = ({
     try {
       await onSubmit();
     } catch (error) {
-      console.error('Error finishing invoice:', error);
+      console.error("Error finishing invoice:", error);
       if (isMounted.current) {
         setIsSubmitting(false);
       }
@@ -56,9 +56,9 @@ const PreviewDoneStep = ({
     onHide();
   };
   const formatCurrency = value => {
-    return new Intl.NumberFormat('es-DO', {
-      style: 'currency',
-      currency: 'DOP',
+    return new Intl.NumberFormat("es-DO", {
+      style: "currency",
+      currency: "DOP",
       minimumFractionDigits: 2
     }).format(value);
   };
@@ -67,7 +67,7 @@ const PreviewDoneStep = ({
     return /*#__PURE__*/React.createElement("div", {
       className: "d-flex align-items-center"
     }, /*#__PURE__*/React.createElement("i", {
-      className: `pi ${rowData.method === 'CASH' ? 'pi-money-bill' : 'pi-credit-card'} mr-2`
+      className: `pi ${rowData.method === "CASH" ? "pi-money-bill" : "pi-credit-card"} mr-2`
     }), /*#__PURE__*/React.createElement("span", null, methodLabel));
   };
   const priceBodyTemplate = rowData => {
@@ -83,10 +83,34 @@ const PreviewDoneStep = ({
     });
   };
   const subtotalBodyTemplate = rowData => {
-    const subtotal = rowData.currentPrice * rowData.quantity * (1 + rowData.tax / 100);
-    return /*#__PURE__*/React.createElement("span", {
-      className: "fw-bold"
-    }, formatCurrency(subtotal));
+    const subtotalSinDescuento = rowData.currentPrice * rowData.quantity * (1 + rowData.tax / 100);
+    const subtotalConDescuento = (rowData.currentPrice * rowData.quantity - (rowData.discount ?? 0)) * (1 + rowData.tax / 100);
+    const tieneDescuento = rowData.discount > 0;
+    return /*#__PURE__*/React.createElement("div", {
+      className: "d-flex flex-column align-items-end"
+    }, tieneDescuento && /*#__PURE__*/React.createElement("small", {
+      className: "text-muted text-decoration-line-through"
+    }, formatCurrency(subtotalSinDescuento)), /*#__PURE__*/React.createElement("span", {
+      className: `fw-bold ${tieneDescuento ? "text-success" : ""}`
+    }, formatCurrency(Math.max(0, subtotalConDescuento))));
+  };
+  const discountBodyTemplate = rowData => {
+    if (!rowData.discount || rowData.discount === 0) {
+      return /*#__PURE__*/React.createElement(Tag, {
+        value: "0%",
+        severity: "secondary",
+        className: "p-tag-rounded"
+      });
+    }
+    return /*#__PURE__*/React.createElement("div", {
+      className: "d-flex flex-column align-items-center gap-1"
+    }, /*#__PURE__*/React.createElement(Tag, {
+      value: rowData.discountType === "percentage" ? `${rowData.discountAmount}%` : "$",
+      severity: "danger",
+      className: "p-tag-rounded"
+    }), /*#__PURE__*/React.createElement("small", {
+      className: "text-danger"
+    }, "- ", formatCurrency(rowData.discount)));
   };
   const paymentAmountTemplate = rowData => {
     return /*#__PURE__*/React.createElement("span", {
@@ -102,8 +126,8 @@ const PreviewDoneStep = ({
     return /*#__PURE__*/React.createElement("div", {
       className: "text-center py-6 px-4 bg-light rounded-3 shadow-sm",
       style: {
-        maxWidth: '600px',
-        margin: '0 auto'
+        maxWidth: "600px",
+        margin: "0 auto"
       }
     }, /*#__PURE__*/React.createElement("i", {
       className: "pi pi-check-circle text-6xl text-success mb-4"
@@ -196,25 +220,25 @@ const PreviewDoneStep = ({
     stripedRows: true,
     size: "small",
     tableStyle: {
-      minWidth: '50rem'
+      minWidth: "50rem"
     }
   }, /*#__PURE__*/React.createElement(Column, {
     field: "id",
     header: "#",
     headerStyle: {
-      width: '50px'
+      width: "50px"
     }
   }), /*#__PURE__*/React.createElement(Column, {
     field: "description",
     header: "Descripci\xF3n",
     headerStyle: {
-      minWidth: '200px'
+      minWidth: "200px"
     }
   }), /*#__PURE__*/React.createElement(Column, {
     field: "quantity",
     header: "Cantidad",
     headerStyle: {
-      width: '100px'
+      width: "100px"
     },
     body: rowData => /*#__PURE__*/React.createElement(Badge, {
       value: rowData.quantity,
@@ -228,6 +252,10 @@ const PreviewDoneStep = ({
     field: "tax",
     header: "Impuesto",
     body: taxBodyTemplate
+  }), /*#__PURE__*/React.createElement(Column, {
+    field: "discount",
+    header: "Descuento",
+    body: discountBodyTemplate
   }), /*#__PURE__*/React.createElement(Column, {
     field: "total",
     header: "Subtotal",
@@ -285,8 +313,8 @@ const PreviewDoneStep = ({
     className: "d-flex justify-content-between align-items-center mb-3"
   }, /*#__PURE__*/React.createElement("span", {
     className: "text-muted"
-  }, balance > 0 ? 'Saldo Pendiente:' : 'Cambio a Devolver:'), /*#__PURE__*/React.createElement("span", {
-    className: `fw-bold ${balance > 0 ? 'text-danger' : 'text-success'}`
+  }, balance > 0 ? "Saldo Pendiente:" : "Cambio a Devolver:"), /*#__PURE__*/React.createElement("span", {
+    className: `fw-bold ${balance > 0 ? "text-danger" : "text-success"}`
   }, formatCurrency(Math.abs(balance)))), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("div", {
     className: "d-flex justify-content-between align-items-center pt-2"
   }, /*#__PURE__*/React.createElement("span", {

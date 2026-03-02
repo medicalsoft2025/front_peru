@@ -77,6 +77,7 @@ export const SpecialtyPatientViewConfigForm = (props: SpecialtyPatientViewConfig
         { value: 'evoluciones', label: "Evoluciones" },
         { value: 'remisiones', label: "Remisiones" },
         { value: 'preadmisiones', label: "Preadmisiones" },
+        { value: 'documentos', label: "Documentos" },
     ]
 
     useEffect(() => {

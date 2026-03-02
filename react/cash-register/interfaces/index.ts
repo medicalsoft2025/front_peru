@@ -10,6 +10,9 @@ export interface CashRegisterProduct {
     pharmacy_available_stock: boolean;
     pharmacy_product_stock: number;
     quantity: number;
+    discountType: 'percentage' | 'value';
+    discountAmount: number;
+    discountCalculated: number;
 }
 
 export interface CashRegisterPayment {

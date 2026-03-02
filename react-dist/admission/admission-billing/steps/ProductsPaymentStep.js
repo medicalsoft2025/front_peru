@@ -10,6 +10,13 @@ import { Divider } from "primereact/divider";
 import { calculateTotal, calculatePaid, calculateChange, validateProductsStep, validatePaymentStep } from "../utils/helpers.js";
 import { useAppointmentProceduresV2 } from "../../../appointments/hooks/useAppointmentsProcedureV2.js";
 import { usePaymentMethods } from "../../../payment-methods/hooks/usePaymentMethods.js";
+const discountTypeOptions = [{
+  label: "%",
+  value: "percentage"
+}, {
+  label: "$",
+  value: "value"
+}];
 const ProductsPaymentStep = ({
   updateFormData,
   addPayment,
@@ -198,6 +205,24 @@ const ProductsPaymentStep = ({
       nextStep();
     }
   };
+  const handleDiscountChange = (uuid, discountType, discountAmount) => {
+    const updatedProducts = formData.products.map(product => {
+      if (product.uuid !== uuid) return product;
+      const subtotal = product.currentPrice * product.quantity;
+      const discountCalculated = discountType === "percentage" ? subtotal * discountAmount / 100 : discountAmount;
+      const total = (subtotal - discountCalculated) * (1 + product.tax / 100);
+      return {
+        ...product,
+        discountType,
+        discount: discountCalculated,
+        // valor real descontado en $
+        discountAmount,
+        // valor ingresado por el usuario
+        total: Math.max(0, total)
+      };
+    });
+    updateFormData("products", updatedProducts);
+  };
   const formatCurrency = value => {
     return new Intl.NumberFormat("es-DO", {
       style: "currency",
@@ -228,8 +253,15 @@ const ProductsPaymentStep = ({
     });
   };
   const productTotalBodyTemplate = rowData => {
-    const total = rowData.currentPrice * rowData.quantity * (1 + rowData.tax / 100);
-    return /*#__PURE__*/React.createElement("strong", null, formatCurrency(total));
+    const hasDiscount = rowData.discount > 0;
+    const subtotalSinDescuento = rowData.currentPrice * rowData.quantity * (1 + rowData.tax / 100);
+    return /*#__PURE__*/React.createElement("div", {
+      className: "d-flex flex-column align-items-end"
+    }, hasDiscount && /*#__PURE__*/React.createElement("small", {
+      className: "text-muted text-decoration-line-through"
+    }, formatCurrency(subtotalSinDescuento)), /*#__PURE__*/React.createElement("strong", {
+      className: hasDiscount ? 'text-success' : ''
+    }, formatCurrency(rowData.total)));
   };
   const paymentAmountBodyTemplate = rowData => {
     return /*#__PURE__*/React.createElement("span", {
@@ -339,6 +371,36 @@ const ProductsPaymentStep = ({
   }), /*#__PURE__*/React.createElement(Column, {
     field: "quantity",
     header: "Cantidad"
+  }), /*#__PURE__*/React.createElement(Column, {
+    header: "Descuento",
+    body: rowData => /*#__PURE__*/React.createElement("div", {
+      className: "d-flex flex-column gap-1"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "d-flex align-items-center gap-1"
+    }, /*#__PURE__*/React.createElement(Dropdown, {
+      value: rowData.discountType ?? "percentage",
+      options: discountTypeOptions,
+      onChange: e => handleDiscountChange(rowData.uuid, e.value, rowData.discountAmount ?? 0),
+      style: {
+        width: "70px"
+      }
+    }), /*#__PURE__*/React.createElement(InputNumber, {
+      value: rowData.discountAmount ?? 0,
+      onValueChange: e => handleDiscountChange(rowData.uuid, rowData.discountType ?? "percentage", e.value ?? 0),
+      min: 0,
+      max: (rowData.discountType ?? "percentage") === "percentage" ? 100 : rowData.currentPrice * rowData.quantity,
+      minFractionDigits: 0,
+      maxFractionDigits: 2,
+      placeholder: "0",
+      inputStyle: {
+        width: "80px"
+      }
+    })), rowData.discount > 0 && /*#__PURE__*/React.createElement("small", {
+      className: "text-danger"
+    }, "- ", formatCurrency(rowData.discount))),
+    headerStyle: {
+      minWidth: "180px"
+    }
   }), /*#__PURE__*/React.createElement(Column, {
     field: "tax",
     header: "Impuesto",

@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { Card } from 'primereact/card';
-import { InputText } from 'primereact/inputtext';
-import { Divider } from 'primereact/divider';
-import { IconField } from 'primereact/iconfield';
-import { InputIcon } from 'primereact/inputicon';
-import { Dialog } from 'primereact/dialog';
+import React, { useEffect, useState } from "react";
+import { Card } from "primereact/card";
+import { InputText } from "primereact/inputtext";
+import { Divider } from "primereact/divider";
+import { IconField } from "primereact/iconfield";
+import { InputIcon } from "primereact/inputicon";
+import { Dialog } from "primereact/dialog";
 import { useProductsByType } from "../products/hooks/useProductsByType.js";
 import { CashRegisterProductCard } from "./CashRegisterProductCard.js";
 import { CartProductCard } from "./CartProductCard.js";
 import { formatPrice } from "../../services/utilidades.js";
-import { useFieldArray, useForm, useWatch } from 'react-hook-form';
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { CashRegisterPaymentForm } from "./CashRegisterPaymentForm.js";
-import { Button } from 'primereact/button';
-import { ProgressSpinner } from 'primereact/progressspinner';
+import { Button } from "primereact/button";
+import { ProgressSpinner } from "primereact/progressspinner";
 import { usePRToast } from "../hooks/usePRToast.js";
-import { Toast } from 'primereact/toast';
+import { Toast } from "primereact/toast";
 import { useLoggedUser } from "../users/hooks/useLoggedUser.js";
 import { useBillingByType } from "../billing/hooks/useBillingByType.js";
 import { usePOSBoxDeposit } from "../deposits/hooks/usePOSBoxDeposit.js";
@@ -59,15 +59,15 @@ export const CashRegisterApp = () => {
     update: updateProduct
   } = useFieldArray({
     control,
-    name: 'products'
+    name: "products"
   });
   const products = useWatch({
     control,
-    name: 'products'
+    name: "products"
   });
   const cashRegisterPaymentFormRef = React.useRef(null);
   const invoiceOptionsRef = React.useRef(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [mappedMedications, setMappedMedications] = useState([]);
   const [filteredMedications, setFilteredMedications] = useState([]);
   const [showInvoiceOptionsModal, setShowInvoiceOptionsModal] = useState(false);
@@ -92,14 +92,14 @@ export const CashRegisterApp = () => {
   }, []);
   useEffect(() => {
     const mappedData = medications.map(product => {
-      const name = `${product.name} ${product.concentration ? `- (${product.concentration})` : ''}`.trim();
+      const name = `${product.name} ${product.concentration ? `- (${product.concentration})` : ""}`.trim();
       return {
         id: product.id,
         name,
         description: product.description,
         concentration: product.concentration,
         presentation: product.presentation,
-        price: parseFloat(product.sale_price) || 0.00,
+        price: parseFloat(product.sale_price) || 0.0,
         pharmacy_available_stock: product.pos_box_available_stock,
         pharmacy_product_stock: product.pos_box_product_stock,
         quantity: 1
@@ -114,8 +114,20 @@ export const CashRegisterApp = () => {
     });
     setFilteredMedications(filteredData);
   }, [searchTerm, mappedMedications]);
+  useEffect(() => {
+    const total = products.reduce((acc, product) => {
+      const subtotalProducto = product.price * product.quantity;
+      return acc + subtotalProducto - (product.discountCalculated ?? 0);
+    }, 0);
+    setSubtotal(total);
+  }, [products]);
   const addToCart = product => {
-    addProduct(product);
+    addProduct({
+      ...product,
+      discountType: "percentage",
+      discountAmount: 0,
+      discountCalculated: 0
+    });
   };
   const removeFromCart = index => {
     removeProduct(index);
@@ -134,6 +146,16 @@ export const CashRegisterApp = () => {
   };
   const handlePay = () => {
     setShowPaymentModal(true);
+  };
+  const handleDiscountChange = (product, discountType, discountAmount) => {
+    const subtotalProducto = product.price * product.quantity;
+    const discountCalculated = discountType === "percentage" ? subtotalProducto * discountAmount / 100 : discountAmount;
+    updateProduct(products.indexOf(product), {
+      ...product,
+      discountType,
+      discountAmount,
+      discountCalculated
+    });
   };
   const processPayment = async () => {
     if (!cashRegisterPaymentFormRef.current) {
@@ -172,7 +194,7 @@ export const CashRegisterApp = () => {
     const payload = {
       invoice: {
         user_id: loggedUser?.id,
-        due_date: dueDate.toISOString().split('T')[0],
+        due_date: dueDate.toISOString().split("T")[0],
         observations: "Venta desde punto de venta",
         third_party_id: client?.id,
         billing: billing?.data,
@@ -183,11 +205,12 @@ export const CashRegisterApp = () => {
         quantity: item.quantity,
         type_product: "medications",
         unit_price: item.price,
-        deposit_id: posBoxDeposit?.id
+        deposit_id: posBoxDeposit?.id,
+        discount: item.discountCalculated ?? 0
       })),
       payments: payments.map(payment => ({
         payment_method_id: parseInt(payment.method.id),
-        payment_date: today.toISOString().split('T')[0],
+        payment_date: today.toISOString().split("T")[0],
         amount: payment.amount
       }))
     };
@@ -195,7 +218,7 @@ export const CashRegisterApp = () => {
     try {
       const data = await storeInvoiceSale(payload);
       showSuccessToast({
-        title: 'Factura Creada',
+        title: "Factura Creada",
         message: `Factura creada con éxito. Código de factura: ${data.invoice.invoice_code}`
       });
       fetchCartProducts();
@@ -204,7 +227,7 @@ export const CashRegisterApp = () => {
       setCreatedInvoiceId(data.invoice.id);
       setShowInvoiceOptionsModal(true);
     } catch (error) {
-      console.error('Error al procesar el pago:', error);
+      console.error("Error al procesar el pago:", error);
     }
   };
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Toast, {
@@ -252,8 +275,8 @@ export const CashRegisterApp = () => {
   }, "No se encontraron productos"))), /*#__PURE__*/React.createElement("div", {
     className: "d-flex",
     style: {
-      width: '400px',
-      minWidth: '400px'
+      width: "400px",
+      minWidth: "400px"
     }
   }, /*#__PURE__*/React.createElement(Card, {
     className: "w-100",
@@ -267,14 +290,14 @@ export const CashRegisterApp = () => {
     pt: {
       body: {
         style: {
-          padding: '1rem',
-          paddingTop: '0'
+          padding: "1rem",
+          paddingTop: "0"
         }
       },
       content: {
         style: {
-          paddingBottom: '1rem',
-          paddingTop: '0'
+          paddingBottom: "1rem",
+          paddingTop: "0"
         }
       }
     }
@@ -292,7 +315,8 @@ export const CashRegisterApp = () => {
   }, /*#__PURE__*/React.createElement(CartProductCard, {
     product: product,
     removeFromCart: () => removeFromCart(products.indexOf(product)),
-    onQuantityChange: handleQuantityChange
+    onQuantityChange: handleQuantityChange,
+    onDiscountChange: handleDiscountChange
   }))))), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("div", {
     className: "d-flex justify-content-between align-items-center"
   }, /*#__PURE__*/React.createElement("span", {
@@ -322,7 +346,7 @@ export const CashRegisterApp = () => {
     onHide: () => setShowInvoiceOptionsModal(false),
     header: "Factura",
     style: {
-      width: '75vw'
+      width: "75vw"
     }
   }, createdInvoiceId && /*#__PURE__*/React.createElement(InvoiceOptions, {
     ref: invoiceOptionsRef,
@@ -333,7 +357,7 @@ export const CashRegisterApp = () => {
     onHide: () => setShowPaymentModal(false),
     header: "Procesar Pago",
     style: {
-      width: '75vw'
+      width: "75vw"
     }
   }, /*#__PURE__*/React.createElement(CashRegisterPaymentForm, {
     ref: cashRegisterPaymentFormRef,

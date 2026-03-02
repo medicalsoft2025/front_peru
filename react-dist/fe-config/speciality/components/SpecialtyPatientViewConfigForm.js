@@ -101,6 +101,9 @@ export const SpecialtyPatientViewConfigForm = props => {
   }, {
     value: 'preadmisiones',
     label: "Preadmisiones"
+  }, {
+    value: 'documentos',
+    label: "Documentos"
   }];
   useEffect(() => {
     if (specialtyId) {

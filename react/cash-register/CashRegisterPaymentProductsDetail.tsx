@@ -19,13 +19,43 @@ export const CashRegisterPaymentProductsDetail = (props: CashRegisterPaymentProd
         return formatPrice(rowData.price);
     };
 
-    const productTotalBodyTemplate = (rowData: CashRegisterProduct) => {
-        const total = rowData.price * rowData.quantity;
-        return <>
-            <div className="d-flex justify-content-end">
-                <strong>{formatPrice(total)}</strong>
+    const productDiscountBodyTemplate = (rowData: CashRegisterProduct) => {
+        if (!rowData.discountCalculated || rowData.discountCalculated === 0) {
+            return <span className="text-muted">-</span>;
+        }
+
+        return (
+            <div className="d-flex flex-column">
+                <span className="text-danger">
+                    - {formatPrice(rowData.discountCalculated)}
+                </span>
+                <small className="text-muted">
+                    {rowData.discountType === 'percentage'
+                        ? `(${rowData.discountAmount}%)`
+                        : '(Valor fijo)'
+                    }
+                </small>
             </div>
-        </>;
+        );
+    };
+
+    const productTotalBodyTemplate = (rowData: CashRegisterProduct) => {
+        const subtotal = rowData.price * rowData.quantity;
+        const totalConDescuento = subtotal - (rowData.discountCalculated ?? 0);
+        const tieneDescuento = rowData.discountCalculated > 0;
+
+        return (
+            <div className="d-flex justify-content-end flex-column align-items-end">
+                {tieneDescuento && (
+                    <small className="text-muted text-decoration-line-through">
+                        {formatPrice(subtotal)}
+                    </small>
+                )}
+                <strong className={tieneDescuento ? 'text-success' : ''}>
+                    {formatPrice(totalConDescuento)}
+                </strong>
+            </div>
+        );
     };
 
     return (
@@ -46,19 +76,24 @@ export const CashRegisterPaymentProductsDetail = (props: CashRegisterPaymentProd
                     </div>
                 }
             >
-                <Column field="name" header="Descripción"></Column>
+                <Column field="name" header="Descripción" />
                 <Column
                     field="price"
                     header="Precio Unitario"
                     body={productPriceBodyTemplate}
-                ></Column>
-                <Column field="quantity" header="Cantidad"></Column>
+                />
+                <Column field="quantity" header="Cantidad" />
+                <Column
+                    field="discount"
+                    header="Descuento"
+                    body={productDiscountBodyTemplate}
+                />
                 <Column
                     field="total"
                     header="Total"
                     body={productTotalBodyTemplate}
-                ></Column>
+                />
             </DataTable>
         </div>
-    )
-}
+    );
+};

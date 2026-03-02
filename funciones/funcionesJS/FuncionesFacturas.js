@@ -167,7 +167,7 @@ async function generateInvoice(idCita, generarDescarga = false) {
     };
     const form = document.createElement("form");
     form.method = "POST";
-    form.action = "../funciones/CrearTicketFactura.php";
+    form.action = "./funciones/CrearTicketFactura.php";
     form.target = "_blank";
 
     const input = document.createElement("input");
@@ -517,7 +517,7 @@ async function generateInvoiceFromInvoice(invoiceData, userData, patientData, ge
     };
     const form = document.createElement("form");
     form.method = "POST";
-    form.action = "../funciones/CrearTicketFactura.php";
+    form.action = "./funciones/CrearTicketFactura.php";
     form.target = "_blank";
 
     const input = document.createElement("input");

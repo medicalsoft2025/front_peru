@@ -436,4 +436,5 @@ RewriteRule ^Test$ Citas/testjairo.php
 RewriteRule ^TestCompanyConfiguration$ Config/testCompanyConfiguration.php
 RewriteRule ^registrosAmbientales$ r-test/environmentalTest.php
 RewriteRule ^clinicalRecordSections$ ClinicalRecordSections/clinicalRecordSections.php
+RewriteRule ^documents$ Documentos/patientDocuments.php
 

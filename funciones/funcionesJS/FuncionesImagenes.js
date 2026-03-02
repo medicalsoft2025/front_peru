@@ -25,7 +25,7 @@ async function guardarArchivo(formData, returnFullData = false) {
   formData.append("tenant_id", tenant);
 
   try {
-    let url = obtenerRutaPrincipal() + `/api/v1/files/`;
+    let url = obtenerRutaPrincipal() + `/pe/api/v1/files/`;
     let response = await fetch(url, {
       method: "POST",
       body: formData,

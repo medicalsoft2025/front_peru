@@ -20,6 +20,11 @@ import { useAppointmentProceduresV2 } from "../../../appointments/hooks/useAppoi
 import { AdmissionBillingFormData } from "../interfaces/AdmisionBilling";
 import { usePaymentMethods } from "../../../payment-methods/hooks/usePaymentMethods";
 
+const discountTypeOptions = [
+  { label: "%", value: "percentage" },
+  { label: "$", value: "value" },
+];
+
 interface ProductsPaymentStep {
   formData: AdmissionBillingFormData;
   updateFormData: <K extends keyof AdmissionBillingFormData>(
@@ -272,6 +277,35 @@ const ProductsPaymentStep: React.FC<ProductsPaymentStep> = ({
     }
   };
 
+  const handleDiscountChange = (
+    uuid: string,
+    discountType: "percentage" | "value",
+    discountAmount: number,
+  ) => {
+    const updatedProducts = formData.products.map((product) => {
+      if (product.uuid !== uuid) return product;
+
+      const subtotal = product.currentPrice * product.quantity;
+
+      const discountCalculated =
+        discountType === "percentage"
+          ? (subtotal * discountAmount) / 100
+          : discountAmount;
+
+      const total = (subtotal - discountCalculated) * (1 + product.tax / 100);
+
+      return {
+        ...product,
+        discountType,
+        discount: discountCalculated, // valor real descontado en $
+        discountAmount, // valor ingresado por el usuario
+        total: Math.max(0, total),
+      };
+    });
+
+    updateFormData("products", updatedProducts);
+  };
+
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("es-DO", {
       style: "currency",
@@ -303,11 +337,23 @@ const ProductsPaymentStep: React.FC<ProductsPaymentStep> = ({
     return <Tag value={`${rowData.tax}%`} severity="info" />;
   };
 
-  const productTotalBodyTemplate = (rowData: any) => {
-    const total =
-      rowData.currentPrice * rowData.quantity * (1 + rowData.tax / 100);
-    return <strong>{formatCurrency(total)}</strong>;
-  };
+ const productTotalBodyTemplate = (rowData: any) => {
+    const hasDiscount = rowData.discount > 0;
+    const subtotalSinDescuento = rowData.currentPrice * rowData.quantity * (1 + rowData.tax / 100);
+
+    return (
+        <div className="d-flex flex-column align-items-end">
+            {hasDiscount && (
+                <small className="text-muted text-decoration-line-through">
+                    {formatCurrency(subtotalSinDescuento)}
+                </small>
+            )}
+            <strong className={hasDiscount ? 'text-success' : ''}>
+                {formatCurrency(rowData.total)}
+            </strong>
+        </div>
+    );
+};
 
   const paymentAmountBodyTemplate = (rowData: any) => {
     return <span className="font-bold">{formatCurrency(rowData.total)}</span>;
@@ -426,6 +472,54 @@ const ProductsPaymentStep: React.FC<ProductsPaymentStep> = ({
                 body={productPriceBodyTemplate}
               ></Column>
               <Column field="quantity" header="Cantidad"></Column>
+              <Column
+                header="Descuento"
+                body={(rowData) => (
+                  <div className="d-flex flex-column gap-1">
+                    <div className="d-flex align-items-center gap-1">
+                      <Dropdown
+                        value={rowData.discountType ?? "percentage"}
+                        options={discountTypeOptions}
+                        onChange={(e) =>
+                          handleDiscountChange(
+                            rowData.uuid,
+                            e.value,
+                            rowData.discountAmount ?? 0,
+                          )
+                        }
+                        style={{ width: "70px" }}
+                      />
+                      <InputNumber
+                        value={rowData.discountAmount ?? 0}
+                        onValueChange={(e) =>
+                          handleDiscountChange(
+                            rowData.uuid,
+                            rowData.discountType ?? "percentage",
+                            e.value ?? 0,
+                          )
+                        }
+                        min={0}
+                        max={
+                          (rowData.discountType ?? "percentage") ===
+                          "percentage"
+                            ? 100
+                            : rowData.currentPrice * rowData.quantity
+                        }
+                        minFractionDigits={0}
+                        maxFractionDigits={2}
+                        placeholder="0"
+                        inputStyle={{ width: "80px" }}
+                      />
+                    </div>
+                    {rowData.discount > 0 && (
+                      <small className="text-danger">
+                        - {formatCurrency(rowData.discount)}
+                      </small>
+                    )}
+                  </div>
+                )}
+                headerStyle={{ minWidth: "180px" }}
+              />
               <Column
                 field="tax"
                 header="Impuesto"

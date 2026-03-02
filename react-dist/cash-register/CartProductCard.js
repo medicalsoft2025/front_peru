@@ -3,11 +3,20 @@ import { formatPrice } from "../../services/utilidades.js";
 import { InputNumber } from "primereact/inputnumber";
 import { Tooltip } from "primereact/tooltip";
 import { Button } from "primereact/button";
+import { Dropdown } from "primereact/dropdown";
+const discountTypeOptions = [{
+  label: '%',
+  value: 'percentage'
+}, {
+  label: '$',
+  value: 'value'
+}];
 export const CartProductCard = props => {
   const {
     product,
     removeFromCart,
-    onQuantityChange
+    onQuantityChange,
+    onDiscountChange
   } = props;
   const handleQuantityChange = newQuantity => {
     if (newQuantity < 1) return;
@@ -23,7 +32,14 @@ export const CartProductCard = props => {
     handleQuantityChange(product.quantity - 1);
   };
   const calculateTotal = () => {
-    return product.price * product.quantity;
+    const subtotal = product.price * product.quantity;
+    return subtotal - (product.discountCalculated ?? 0);
+  };
+  const handleDiscountTypeChange = type => {
+    onDiscountChange(product, type, product.discountAmount);
+  };
+  const handleDiscountAmountChange = amount => {
+    onDiscountChange(product, product.discountType, amount ?? 0);
   };
   return /*#__PURE__*/React.createElement("div", {
     className: "card h-100 border-0"
@@ -94,6 +110,35 @@ export const CartProductCard = props => {
   }, /*#__PURE__*/React.createElement("i", {
     className: "fas fa-cubes me-1"
   }), "Stock disponible: ", product.pharmacy_product_stock)), /*#__PURE__*/React.createElement("div", {
+    className: "mb-3"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "d-flex align-items-center gap-2"
+  }, /*#__PURE__*/React.createElement("small", {
+    className: "text-muted me-1"
+  }, /*#__PURE__*/React.createElement("i", {
+    className: "fas fa-tag me-1"
+  }), "Descuento:"), /*#__PURE__*/React.createElement(Dropdown, {
+    value: product.discountType,
+    options: discountTypeOptions,
+    onChange: e => handleDiscountTypeChange(e.value),
+    style: {
+      width: '75px'
+    }
+  }), /*#__PURE__*/React.createElement(InputNumber, {
+    value: product.discountAmount,
+    onValueChange: e => handleDiscountAmountChange(e.value ?? 0),
+    min: 0,
+    max: product.discountType === 'percentage' ? 100 : product.price * product.quantity,
+    minFractionDigits: 0,
+    maxFractionDigits: 2,
+    placeholder: "0",
+    className: "flex-grow-1",
+    inputClassName: "w-100"
+  })), product.discountCalculated > 0 && /*#__PURE__*/React.createElement("small", {
+    className: "text-danger mt-1 d-block"
+  }, /*#__PURE__*/React.createElement("i", {
+    className: "fas fa-arrow-down me-1"
+  }), "Descuento aplicado: - ", formatPrice(product.discountCalculated))), /*#__PURE__*/React.createElement("div", {
     className: "mt-auto border-top pt-3"
   }, /*#__PURE__*/React.createElement("div", {
     className: "d-flex justify-content-between align-items-center mb-2"
@@ -101,11 +146,17 @@ export const CartProductCard = props => {
     className: "small text-muted"
   }, "Precio unitario:"), /*#__PURE__*/React.createElement("span", {
     className: "small text-muted"
-  }, formatPrice(product.price))), /*#__PURE__*/React.createElement("div", {
+  }, formatPrice(product.price))), product.discountCalculated > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "d-flex justify-content-between align-items-center mb-1"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "small text-muted"
+  }, "Subtotal:"), /*#__PURE__*/React.createElement("span", {
+    className: "small text-muted text-decoration-line-through"
+  }, formatPrice(product.price * product.quantity))), /*#__PURE__*/React.createElement("div", {
     className: "d-flex justify-content-between align-items-center"
   }, /*#__PURE__*/React.createElement("span", {
     className: "fw-bold text-dark"
   }, "Total:"), /*#__PURE__*/React.createElement("span", {
-    className: "fw-bold fs-6"
+    className: `fw-bold fs-6 ${product.discountCalculated > 0 ? 'text-success' : ''}`
   }, formatPrice(calculateTotal()))))));
 };

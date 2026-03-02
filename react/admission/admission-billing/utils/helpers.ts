@@ -1,11 +1,17 @@
 export const calculateTotal = (products: any = [], facturacionEntidad: boolean): number => {
   const priceField = facturacionEntidad ? 'copayment' : 'price';
   const productsArray = Array.isArray(products) ? products : Object.values(products || {});
+  
   return productsArray.reduce((sum, product) => {
     const price = Number(product?.[priceField]) || 0;
     const quantity = Number(product?.quantity) || 0;
     const tax = Number(product?.tax) || 0;
-    return sum + (price * quantity * (1 + tax / 100));
+    const discount = Number(product?.discount) || 0; // nuevo
+
+    const subtotal = price * quantity;
+    const afterDiscount = Math.max(0, subtotal - discount); // nuevo
+    
+    return sum + afterDiscount * (1 + tax / 100);
   }, 0);
 };
 

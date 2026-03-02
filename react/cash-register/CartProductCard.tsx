@@ -4,15 +4,22 @@ import { formatPrice } from "../../services/utilidades";
 import { InputNumber } from "primereact/inputnumber";
 import { Tooltip } from "primereact/tooltip";
 import { Button } from "primereact/button";
+import { Dropdown } from "primereact/dropdown";
+
+const discountTypeOptions = [
+    { label: '%', value: 'percentage' },
+    { label: '$', value: 'value' }
+];
 
 interface CartProductCardProps {
     product: CashRegisterProduct;
     removeFromCart: (product: CashRegisterProduct) => void;
     onQuantityChange: (product: CashRegisterProduct, quantity: number) => void;
+    onDiscountChange: (product: CashRegisterProduct, discountType: 'percentage' | 'value', discountAmount: number) => void;
 }
 
 export const CartProductCard = (props: CartProductCardProps) => {
-    const { product, removeFromCart, onQuantityChange } = props;
+    const { product, removeFromCart, onQuantityChange, onDiscountChange } = props;
 
     const handleQuantityChange = (newQuantity: number) => {
         if (newQuantity < 1) return;
@@ -33,7 +40,16 @@ export const CartProductCard = (props: CartProductCardProps) => {
     };
 
     const calculateTotal = () => {
-        return product.price * product.quantity;
+        const subtotal = product.price * product.quantity;
+        return subtotal - (product.discountCalculated ?? 0);
+    };
+
+    const handleDiscountTypeChange = (type: 'percentage' | 'value') => {
+        onDiscountChange(product, type, product.discountAmount);
+    };
+
+    const handleDiscountAmountChange = (amount: number) => {
+        onDiscountChange(product, product.discountType, amount ?? 0);
     };
 
     return (
@@ -116,6 +132,45 @@ export const CartProductCard = (props: CartProductCardProps) => {
                     )}
                 </div>
 
+                {/* Sección de descuento */}
+                <div className="mb-3">
+                    <div className="d-flex align-items-center gap-2">
+                        <small className="text-muted me-1">
+                            <i className="fas fa-tag me-1"></i>
+                            Descuento:
+                        </small>
+                        <Dropdown
+                            value={product.discountType}
+                            options={discountTypeOptions}
+                            onChange={(e) => handleDiscountTypeChange(e.value)}
+                            style={{ width: '75px' }}
+                        />
+                        <InputNumber
+                            value={product.discountAmount}
+                            onValueChange={(e) => handleDiscountAmountChange(e.value ?? 0)}
+                            min={0}
+                            max={
+                                product.discountType === 'percentage'
+                                    ? 100
+                                    : product.price * product.quantity
+                            }
+                            minFractionDigits={0}
+                            maxFractionDigits={2}
+                            placeholder="0"
+                            className="flex-grow-1"
+                            inputClassName="w-100"
+                        />
+                    </div>
+
+                    {/* Muestra el valor descontado solo si hay descuento */}
+                    {product.discountCalculated > 0 && (
+                        <small className="text-danger mt-1 d-block">
+                            <i className="fas fa-arrow-down me-1"></i>
+                            Descuento aplicado: - {formatPrice(product.discountCalculated)}
+                        </small>
+                    )}
+                </div>
+
                 <div className="mt-auto border-top pt-3">
                     <div className="d-flex justify-content-between align-items-center mb-2">
                         <span className="small text-muted">Precio unitario:</span>
@@ -124,9 +179,19 @@ export const CartProductCard = (props: CartProductCardProps) => {
                         </span>
                     </div>
 
+                    {/* Muestra el subtotal tachado solo si hay descuento */}
+                    {product.discountCalculated > 0 && (
+                        <div className="d-flex justify-content-between align-items-center mb-1">
+                            <span className="small text-muted">Subtotal:</span>
+                            <span className="small text-muted text-decoration-line-through">
+                                {formatPrice(product.price * product.quantity)}
+                            </span>
+                        </div>
+                    )}
+
                     <div className="d-flex justify-content-between align-items-center">
                         <span className="fw-bold text-dark">Total:</span>
-                        <span className="fw-bold fs-6">
+                        <span className={`fw-bold fs-6 ${product.discountCalculated > 0 ? 'text-success' : ''}`}>
                             {formatPrice(calculateTotal())}
                         </span>
                     </div>

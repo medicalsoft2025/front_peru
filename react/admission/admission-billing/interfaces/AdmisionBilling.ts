@@ -27,7 +27,6 @@ export interface PatientData {
   email_notifications?: boolean;
 }
 
-
 export interface BillingData {
   entity: string;
   authorizationDate: Date | null;
@@ -53,7 +52,9 @@ export interface Product {
   currentPrice: number;
   quantity: number;
   tax: number;
-  discount: number;
+  discount: number; // valor real descontado en $
+  discountAmount?: number; // valor ingresado por el usuario
+  discountType?: "percentage" | "value";
   total: number;
   entities?: any[];
   matchProductByEntity?: any | null;
@@ -72,7 +73,6 @@ export interface PaymentMethod {
 }
 
 export interface CurrentPayment {
-
   method: any;
   amount: number;
   authorizationNumber: string;
@@ -100,8 +100,14 @@ export interface AdmissionBillingFormData {
 export interface PatientStepProps {
   appointmentId: string;
   formData: AdmissionBillingFormData;
-  updateFormData: <K extends keyof AdmissionBillingFormData>(section: K, data: Partial<AdmissionBillingFormData[K]>) => void;
-  updateBillingData: <K extends keyof BillingData>(field: K, value: BillingData[K]) => void;
+  updateFormData: <K extends keyof AdmissionBillingFormData>(
+    section: K,
+    data: Partial<AdmissionBillingFormData[K]>,
+  ) => void;
+  updateBillingData: <K extends keyof BillingData>(
+    field: K,
+    value: BillingData[K],
+  ) => void;
   nextStep: () => void;
 
   toast: React.RefObject<Toast | null>;
@@ -109,8 +115,11 @@ export interface PatientStepProps {
 
 export interface PaymentStepProps {
   formData: AdmissionBillingFormData;
-  updateFormData: (section: keyof AdmissionBillingFormData, data: Partial<AdmissionBillingFormData[keyof AdmissionBillingFormData]>) => void;
-  addPayment: (payment: Omit<PaymentMethod, 'id'>) => void;
+  updateFormData: (
+    section: keyof AdmissionBillingFormData,
+    data: Partial<AdmissionBillingFormData[keyof AdmissionBillingFormData]>,
+  ) => void;
+  addPayment: (payment: Omit<PaymentMethod, "id">) => void;
   removePayment: (id: number) => void;
   nextStep: () => void;
   prevStep: () => void;
@@ -136,6 +145,3 @@ export interface FormErrors {
     type: string;
   };
 }
-
-
-

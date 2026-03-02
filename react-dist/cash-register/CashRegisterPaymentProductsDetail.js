@@ -11,11 +11,31 @@ export const CashRegisterPaymentProductsDetail = props => {
   const productPriceBodyTemplate = rowData => {
     return formatPrice(rowData.price);
   };
+  const productDiscountBodyTemplate = rowData => {
+    if (!rowData.discountCalculated || rowData.discountCalculated === 0) {
+      return /*#__PURE__*/React.createElement("span", {
+        className: "text-muted"
+      }, "-");
+    }
+    return /*#__PURE__*/React.createElement("div", {
+      className: "d-flex flex-column"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "text-danger"
+    }, "- ", formatPrice(rowData.discountCalculated)), /*#__PURE__*/React.createElement("small", {
+      className: "text-muted"
+    }, rowData.discountType === 'percentage' ? `(${rowData.discountAmount}%)` : '(Valor fijo)'));
+  };
   const productTotalBodyTemplate = rowData => {
-    const total = rowData.price * rowData.quantity;
-    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-      className: "d-flex justify-content-end"
-    }, /*#__PURE__*/React.createElement("strong", null, formatPrice(total))));
+    const subtotal = rowData.price * rowData.quantity;
+    const totalConDescuento = subtotal - (rowData.discountCalculated ?? 0);
+    const tieneDescuento = rowData.discountCalculated > 0;
+    return /*#__PURE__*/React.createElement("div", {
+      className: "d-flex justify-content-end flex-column align-items-end"
+    }, tieneDescuento && /*#__PURE__*/React.createElement("small", {
+      className: "text-muted text-decoration-line-through"
+    }, formatPrice(subtotal)), /*#__PURE__*/React.createElement("strong", {
+      className: tieneDescuento ? 'text-success' : ''
+    }, formatPrice(totalConDescuento)));
   };
   return /*#__PURE__*/React.createElement("div", {
     className: "border-round border-1 surface-border"
@@ -43,6 +63,10 @@ export const CashRegisterPaymentProductsDetail = props => {
   }), /*#__PURE__*/React.createElement(Column, {
     field: "quantity",
     header: "Cantidad"
+  }), /*#__PURE__*/React.createElement(Column, {
+    field: "discount",
+    header: "Descuento",
+    body: productDiscountBodyTemplate
   }), /*#__PURE__*/React.createElement(Column, {
     field: "total",
     header: "Total",

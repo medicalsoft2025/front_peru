@@ -157,7 +157,7 @@
 
     <div class="d-flex fw-bold">
       <span>TOTAL:</span>
-      <span>$<?php echo number_format($subtotal, 2); ?></span>
+      <span>$<?php echo number_format($subtotal - $descuento, 2); ?></span>
     </div>
     <small><strong>Facturado por: </strong><?php echo $facturador; ?></small>
 

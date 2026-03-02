@@ -18,7 +18,7 @@ include "../../header.php";
     </div>
 
     <script type="module">
-        import SpecialityApp from '../../react-dist/fe-config/speciality/SpecialityApp.js';
+        import SpecialityApp from './react-dist/fe-config/speciality/SpecialityApp.js';
         import { renderApp } from './services/react/app-renderer.js';
 
         renderApp(SpecialityApp, 'specialities');

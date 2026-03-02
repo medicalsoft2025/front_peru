@@ -38,13 +38,11 @@ export const PreviewSpecialtyPatientViewCards = (
 
     useEffect(() => {
         if (userId) {
-            console.log("patientViewCards", patientViewCards);
             setFinalAvailableCardsIds(patientViewCards);
         }
     }, [patientViewCards]);
 
     useEffect(() => {
-        console.log("userId", userId);
         fetchUserPatientViewCards();
     }, [userId]);
 
@@ -163,6 +161,13 @@ export const PreviewSpecialtyPatientViewCards = (
             titulo: "Preadmisiones",
             texto: "Revisa las preadmisiones del paciente",
             url: "preadmisiones?patient_id=" + patientId,
+        },
+        {
+            id: "documentos",
+            icono: "far fa-file-alt",
+            titulo: "Documentos",
+            texto: "Revisa los documentos del paciente",
+            url: "documents?patient_id=" + patientId,
         },
     ];
 
