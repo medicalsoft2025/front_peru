@@ -37,7 +37,8 @@ const redirectToDashboard = () => {
     if (currentConfig?.config_tenants?.finished_configuration) {
         window.location.href = `${origin}${BASE_PATH}/Dashboard`;
     } else {
-        window.location.href = `${origin}${BASE_PATH}/configuracionesGenerales`;
+        // window.location.href = `${origin}${BASE_PATH}/configuracionesGenerales`;
+        window.location.href = `${origin}${BASE_PATH}/Dashboard`;
     }
 };
 
